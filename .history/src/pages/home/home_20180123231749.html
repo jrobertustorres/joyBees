@@ -1,0 +1,91 @@
+<!-- <ion-content class="background-stable"> -->
+<ion-content class="content-stable">
+
+    <div class="text-center">
+        <div>
+            <img src="assets/imgs/logo.png" class="logo-style">
+        </div>
+    </div>
+
+    <!-- <ion-segment [(ngModel)]="segment" (ionChange)="updateUserData()"> -->
+    <!-- <div padding> -->
+    <ion-segment [(ngModel)]="segment" class="background-stable">
+        <ion-segment-button value="vagasDestaque" style="border-color: #484848;">
+            Vagas em destaque
+        </ion-segment-button>
+        <ion-segment-button value="login" style="border-color: #484848;">
+            Login
+        </ion-segment-button>
+    </ion-segment>
+    <!-- </div> -->
+
+    <div [ngSwitch]="segment">
+        <ion-list *ngSwitchCase="'vagasDestaque'">
+            <!-- <ion-item>
+                <ion-thumbnail item-left>
+                    <img src="img/men-image1.png">
+                </ion-thumbnail>
+                <h2>Cothing</h2>
+            </ion-item> -->
+            <ion-card>
+                <ion-card-header text-wrap>
+                    Vaga Operador de máquina rrrrrrrrrrrrrrrrrrrrrrrrr
+                </ion-card-header>
+                <ion-card-content>
+                    The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
+                </ion-card-content>
+            </ion-card>
+            <ion-card>
+                <ion-card-header>
+                    Vaga serviços gerais
+                </ion-card-header>
+                <ion-card-content>
+                    The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
+                </ion-card-content>
+            </ion-card>
+
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'login'">
+            <ion-card>
+                <ion-card-header style="font-weight: 500;">
+                    {{ 'ENTRE_SUA_CONTA' }}
+                </ion-card-header>
+                <ion-card-content>
+                    <button ion-button icon-left block color="navbarColor">
+                  <ion-icon ios="logo-facebook" md="logo-facebook" class="margin-right-icon"></ion-icon>
+                  <span class="span-style">{{ 'FACEBOOK_LOGIN' }}</span>
+                </button>
+                    <button ion-button icon-left block color="navbarColor" style="margin-top: 15px;" (click)="goLogin()">
+                  <ion-icon ios="ios-mail" md="md-mail" class="margin-right-icon"></ion-icon>
+                  <span class="span-style" style="font-size: 12px;">{{ 'ENTRAR_EMAIL_SENHA' }}</span>
+                </button>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card>
+                <ion-card-header style="font-weight: 500;">
+                    {{ 'SEM_CONTA' }}
+                </ion-card-header>
+                <ion-card-content>
+
+                    <button ion-button icon-left block color="navbarColor" (click)="goMeusDados()">
+                  <ion-icon ios="ios-person-add" md="md-person-add" class="margin-right-icon"></ion-icon>
+                  <span class="span-style">{{ 'QUERO_CADASTRAR'  }}</span>
+                </button>
+                </ion-card-content>
+            </ion-card>
+        </ion-list>
+    </div>
+
+    <!-- <ion-card>
+        <ion-card-header>
+            Header
+        </ion-card-header>
+        <ion-card-content>
+            The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
+        </ion-card-content>
+    </ion-card> -->
+
+
+</ion-content>
