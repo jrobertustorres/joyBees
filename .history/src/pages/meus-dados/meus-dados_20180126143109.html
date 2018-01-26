@@ -1,0 +1,196 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <ion-title>{{ 'MEUS_DADOS' | translate }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<!-- <ion-content padding> -->
+<ion-content>
+    <form [formGroup]="dadosUsuarioForm" (ngSubmit)="submeterDadosUsuario()">
+
+        <ion-item-divider class="item-divider-style" style="margin-top: 0px;">
+            {{ 'DADOS_PESSOAIS' | translate }}
+            <div item-content>
+                <ion-icon ios="ios-person" md="md-person" item-start></ion-icon>
+            </div>
+        </ion-item-divider>
+
+        <ion-item>
+            <ion-label stacked>{{ 'NOME' | translate }}</ion-label>
+            <ion-input formControlName="nomePessoa" [(ngModel)]="usuarioEntity.nomePessoa" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <div *ngIf="!dadosUsuarioForm.get('nomePessoa').valid && dadosUsuarioForm.get('nomePessoa').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="dadosUsuarioForm.get('nomePessoa').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_100_CARACTERES' | translate }}</div>
+
+        <ion-item>
+            <ion-label stacked>{{ 'EMAIL' | translate }}</ion-label>
+            <ion-input formControlName="loginUsuario" [(ngModel)]="usuarioEntity.loginUsuario" type="email" [readonly]="isReadOnly"></ion-input>
+        </ion-item>
+        <div *ngIf="(!dadosUsuarioForm.get('loginUsuario').valid && dadosUsuarioForm.get('loginUsuario').touched) && !dadosUsuarioForm.get('loginUsuario').hasError('pattern')" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="dadosUsuarioForm.get('loginUsuario').hasError('pattern')" [ngClass]="'class-error-form'">{{ 'EMAIL_INVALIDO' | translate }}</div>
+
+        <ion-item>
+            <ion-label>{{ 'GENERO' | translate }}</ion-label>
+            <ion-select formControlName="genero" [(ngModel)]="usuarioEntity.genero" class="font-size-select" cancelText="CANCELAR">
+                <ion-option value="fornecedor">Feminino</ion-option>
+                <ion-option value="cliente">Masculino</ion-option>
+                <!-- <ion-option *ngFor="let cidade of cidades" value="{{cidade.idCidade}}">{{cidade.cidade}}</ion-option> -->
+            </ion-select>
+        </ion-item>
+        <div *ngIf="!dadosUsuarioForm.get('genero').valid && dadosUsuarioForm.get('genero').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
+        <!-- <ion-item>
+            <ion-label stacked>{{ 'GENERO' | translate }}</ion-label>
+            <ion-input formControlName="genero" [(ngModel)]="usuarioEntity.genero" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <div *ngIf="!dadosUsuarioForm.get('genero').valid && dadosUsuarioForm.get('genero').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div> -->
+
+        <ion-item>
+            <ion-label stacked>{{ 'IDADE' | translate }}</ion-label>
+            <ion-input formControlName="idade" [(ngModel)]="usuarioEntity.idade" type="number" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <div *ngIf="!dadosUsuarioForm.get('idade').valid && dadosUsuarioForm.get('idade').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
+        <ion-item>
+            <ion-label stacked>{{ 'NACIONALIDADE' | translate }}</ion-label>
+            <ion-input formControlName="nacionalidade" [(ngModel)]="usuarioEntity.nacionalidade" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <div *ngIf="!dadosUsuarioForm.get('nacionalidade').valid && dadosUsuarioForm.get('nacionalidade').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="dadosUsuarioForm.get('nacionalidade').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_100_CARACTERES' | translate }}</div>
+
+        <ion-item>
+            <ion-label stacked>{{ 'EXPERIENCIA_PROFICIONAL' | translate }}</ion-label>
+            <ion-textarea formControlName="experienciaProfissional" [(ngModel)]="usuarioEntity.experienciaProfissional" rows="5" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-textarea>
+        </ion-item>
+        <div *ngIf="dadosUsuarioForm.get('experienciaProfissional').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_500_CARACTERES' | translate }}</div>
+
+        <ion-list>
+            <ion-item>
+                <ion-label>{{ 'GRAU_ENTENDIMENTO' | translate }}</ion-label>
+                <ion-select formControlName="grauEntendimento" [(ngModel)]="usuarioEntity.grauEntendimento" class="font-size-select" cancelText="CANCELAR">
+                    <ion-option value="nenhum">Nenhum</ion-option>
+                    <ion-option value="basico">Básico</ion-option>
+                    <ion-option value="intermediario">Intermediário</ion-option>
+                    <ion-option value="avancado">Avançado</ion-option>
+                </ion-select>
+            </ion-item>
+            <!-- <div *ngIf="!dadosUsuarioForm.get('grauEntendimento').valid && dadosUsuarioForm.get('grauEntendimento').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div> -->
+        </ion-list>
+
+        <ion-item>
+            <ion-label>{{ 'GRAU_FALA' | translate }}</ion-label>
+            <ion-select formControlName="grauFala" [(ngModel)]="usuarioEntity.grauFala" class="font-size-select" cancelText="CANCELAR">
+                <ion-option value="nenhum">Nenhum</ion-option>
+                <ion-option value="basico">Básico</ion-option>
+                <ion-option value="intermediario">Intermediário</ion-option>
+                <ion-option value="avancado">Avançado</ion-option>
+            </ion-select>
+        </ion-item>
+        <div *ngIf="dadosUsuarioForm.get('grauFala').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_30_CARACTERES' | translate }}</div>
+
+        <ion-item>
+            <ion-label>{{ 'GRAU_ESCRITA' | translate }}</ion-label>
+            <ion-select formControlName="grauEscrita" [(ngModel)]="usuarioEntity.grauEscrita" class="font-size-select" cancelText="CANCELAR">
+                <ion-option value="nenhum">Nenhum</ion-option>
+                <ion-option value="basico">Básico</ion-option>
+                <ion-option value="intermediario">Intermediário</ion-option>
+                <ion-option value="avancado">Avançado</ion-option>
+            </ion-select>
+        </ion-item>
+        <div *ngIf="dadosUsuarioForm.get('grauEscrita').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_30_CARACTERES' | translate }}</div>
+
+        <!-- <ion-item>
+            <ion-label stacked>{{ 'GRAU_ESCRITA' | translate }}</ion-label>
+            <ion-textarea formControlName="grauEscrita" [(ngModel)]="usuarioEntity.grauEscrita" rows="5" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-textarea>
+        </ion-item>
+        <div *ngIf="dadosUsuarioForm.get('grauEscrita').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_30_CARACTERES' | translate }}</div> -->
+
+        <ion-item>
+            <ion-label stacked>{{ 'SALARIO' | translate }}</ion-label>
+            <ion-input formControlName="salario" [(ngModel)]="usuarioEntity.salario" rows="5" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <!-- <div *ngIf="dadosUsuarioForm.get('salario').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_500_CARACTERES' | translate }}</div> -->
+
+
+        <ion-item>
+            <ion-label stacked>{{ 'TELEFONE' | translate }}</ion-label>
+            <ion-input formControlName="telefonePessoa" [(ngModel)]="usuarioEntity.telefonePessoa" type="text"></ion-input>
+        </ion-item>
+        <div *ngIf="dadosUsuarioForm.get('telefonePessoa').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_50_CARACTERES' | translate }}</div>
+
+        <ion-item>
+            <ion-label stacked>{{ 'TELEFONE' | translate }} 2</ion-label>
+            <ion-input formControlName="telefonePessoa2" [(ngModel)]="usuarioEntity.telefonePessoa2" type="text"></ion-input>
+        </ion-item>
+        <div *ngIf="dadosUsuarioForm.get('telefonePessoa2').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_50_CARACTERES' | translate }}</div>
+
+        <ion-item-divider class="item-divider-style">
+            {{ 'ENDERECO' | translate }}
+            <div item-content>
+                <ion-icon ios="ios-home" md="md-home" item-start></ion-icon>
+            </div>
+        </ion-item-divider>
+
+        <ion-item>
+            <ion-label stacked>{{ 'ENDERECO' | translate }}</ion-label>
+            <ion-textarea formControlName="endereco" [(ngModel)]="usuarioEntity.endereco" rows="5" maxLength="500"></ion-textarea>
+        </ion-item>
+        <div *ngIf="!dadosUsuarioForm.get('endereco').valid && dadosUsuarioForm.get('endereco').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="dadosUsuarioForm.get('endereco').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_300_CARACTERES' | translate }}</div>
+
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>{{ 'PROVINCIA' | translate }}</ion-label>
+                <ion-select formControlName="idEstado" [(ngModel)]="usuarioEntity.idEstado" (ionChange)="getCidadesByEstadoUsuario(usuarioEntity.idEstado)" cancelText="CANCELAR">
+                    <ion-option *ngFor="let estado of estados" value="{{estado.idEstado}}">{{estado.nome}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="!dadosUsuarioForm.get('idEstado').valid && dadosUsuarioForm.get('idEstado').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        </ion-list>
+
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>{{ 'CIDADE' | translate }}</ion-label>
+                <ion-select formControlName="idCidade" [(ngModel)]="usuarioEntity.idCidade" cancelText="CANCELAR">
+                    <ion-option *ngFor="let cidade of cidades" value="{{cidade.idCidade}}">{{cidade.cidade}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="!dadosUsuarioForm.get('idCidade').valid && dadosUsuarioForm.get('idCidade').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        </ion-list>
+
+        <div *ngIf="!usuarioEntity.idUsuario">
+            <ion-item-divider class="item-divider-style">
+                {{ 'MINHA_SENHA' | translate }}
+                <div item-content>
+                    <ion-icon ios="ios-lock" md="md-lock" item-start></ion-icon>
+                </div>
+            </ion-item-divider>
+
+            <ion-item>
+                <ion-label stacked>{{ 'SENHA' | translate }}</ion-label>
+                <ion-input formControlName="senhaUsuario" id="senhaUsuario" [(ngModel)]="usuarioEntity.senhaUsuario" type="password"></ion-input>
+            </ion-item>
+            <div *ngIf="!dadosUsuarioForm.get('senhaUsuario').valid && dadosUsuarioForm.get('senhaUsuario').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
+            <ion-item>
+                <ion-label stacked>{{ 'CONFIRMAR_SENHA' | translate }}</ion-label>
+                <ion-input type="password" id="confirmSenha" formControlName="confirmSenha" [(ngModel)]="usuarioEntity.confirmSenha"></ion-input>
+            </ion-item>
+            <div [ngClass]="'class-error-form'" *ngIf="(!dadosUsuarioForm.get('confirmSenha').valid && dadosUsuarioForm.get('confirmSenha').touched) && dadosUsuarioForm.controls.confirmSenha.errors?.MatchPassword">{{ 'SENHAS_NAO_CONFEREM' | translate }}</div>
+        </div>
+
+        <!-- <div *ngIf="!usuarioEntity.idUsuario">
+            <ion-item style="margin-top: 20px;" text-wrap>
+                <ion-label stacked (click)="openModalTermosCadastro()" class="underline-class">{{ 'ACEITO_TERMOS' | translate }}</ion-label>
+                <ion-checkbox color="secondary" formControlName="statusAceitoTermoUso" id="statusAceitoTermoUso" [(ngModel)]="usuarioEntity.statusAceitoTermoUso"></ion-checkbox>
+            </ion-item>
+            <div *ngIf="!dadosUsuarioForm.get('statusAceitoTermoUso').valid && dadosUsuarioForm.get('statusAceitoTermoUso').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        </div> -->
+
+        <button ion-button block type="submit" color="navbarColor" class="margin-button-save">{{ 'SALVAR' | translate }}</button>
+    </form>
+
+</ion-content>
