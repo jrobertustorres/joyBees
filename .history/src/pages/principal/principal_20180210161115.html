@@ -1,0 +1,58 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+        <ion-title>
+            <span>{{ 'VAGAS_EMPREGO' | translate }}</span>
+        </ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="content-stable">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <div class="h2-color-cards" text-wrap padding *ngIf="vagas?.length == 0">
+        <div style="text-align: center;color: #484848;"><strong>{{ 'SEM_VAGAS' | translate }}</strong></div>
+        <div style="text-align: center;">
+            <ion-icon style="font-size: 30px;color: #484848;" ios="ios-sad" md="md-sad"></ion-icon>
+        </div>
+    </div>
+
+    <ion-list>
+        <ion-card *ngFor="let vaga of vagas">
+            <ion-card-header text-wrap>
+                <strong>{{vaga.nome}}</strong>
+            </ion-card-header>
+            <ion-card-content>
+                <p>{{vaga.descricao}}</p>
+                <p>{{vaga.cidadeEstadoFormat}}</p>
+                <p style="color: #999">
+                    <ion-icon ios="ios-calendar" md="md-calendar"></ion-icon> {{vaga.tempoAberto}}
+                </p>
+            </ion-card-content>
+            <ion-row class="border-top-color">
+                <ion-col>
+                </ion-col>
+                <ion-col>
+                    <button ion-button icon-left clear small (click)="candidatarVaga(vaga.idVaga)">
+                        <ion-icon ios="ios-thumbs-up" md="md-thumbs-up"></ion-icon>
+                        <div>{{ 'BTN_CANDIDATAR_VAGA' | translate }}</div>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </ion-list>
+
+    <!-- <ion-slides [options]="mySlideOptions">
+        <ion-slide *ngFor="let slide of slides">
+            <img [src]="slide.MediaUrl">
+        </ion-slide>
+    </ion-slides> -->
+
+</ion-content>

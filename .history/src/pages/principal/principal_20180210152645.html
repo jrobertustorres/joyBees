@@ -1,0 +1,48 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+        <ion-title>
+            <span>Home</span>
+        </ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="content-stable">
+
+    <ion-list>
+        <ion-card *ngFor="let vaga of vagas">
+            <ion-card-header text-wrap>
+                <strong>{{vaga.nome}}</strong>
+            </ion-card-header>
+            <ion-card-content>
+                <p>{{vaga.descricao}}</p>
+                <p>{{vaga.cidadeEstadoFormat}}</p>
+                <p style="color: #999">
+                    <ion-icon ios="ios-calendar" md="md-calendar"></ion-icon> {{vaga.tempoAberto}}
+                </p>
+            </ion-card-content>
+            <ion-row class="border-top-color">
+                <ion-col>
+                </ion-col>
+                <ion-col>
+                    <button ion-button icon-left clear small (click)="candidatarVaga(vaga.idVaga)">
+                        <ion-icon ios="ios-thumbs-up" md="md-thumbs-up"></ion-icon>
+                        <div>CANDIDATAR-ME</div>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </ion-list>
+
+    <!-- <ion-slides [options]="mySlideOptions">
+        <ion-slide *ngFor="let slide of slides">
+            <img [src]="slide.MediaUrl">
+        </ion-slide>
+    </ion-slides> -->
+
+</ion-content>

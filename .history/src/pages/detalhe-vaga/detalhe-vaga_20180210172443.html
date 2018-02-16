@@ -1,0 +1,45 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        <ion-title>
+            <span>{{ 'VAGA_DETALHE' | translate }}</span>
+        </ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="content-stable">
+
+    <!-- <ion-card text-wrap *ngIf="vagaDetalheEntity?.length > 0"> -->
+    <ion-card text-wrap>
+        <ion-item>
+            <!-- <p>{{ 'SERVICO' | translate}}: {{ vagaDetalheEntity.nomeTipoServico }}</p> -->
+            <!-- <p><strong>{{ vagaDetalheEntity.nome }}</strong></p> -->
+            <p>
+                <ion-icon ios="ios-briefcase" md="md-briefcase"></ion-icon> {{ vagaDetalhe.nomeEmpresa }}</p>
+            <p>Empreiteira: {{ vagaDetalhe.nomeFornecedor }}</p>
+            <p>
+                <ion-icon ios="ios-locate" md="md-locate"></ion-icon> {{ vagaDetalhe.cidadeEstadoFormat }}</p>
+            <p>
+                <ion-icon ios="ios-cash" md="md-cash"></ion-icon> {{ vagaDetalhe.salario }}</p>
+            <p>Sexo: {{ vagaDetalhe.sexoFormat }}</p>
+            <p>Abertura da vaga: {{ vagaDetalhe.dataInicialFormat }}</p>
+            <p>Turno: {{ vagaDetalhe.turno }}</p>
+            <p>Vagas disponíveis: {{ vagaDetalhe.qtdVaga }}</p>
+        </ion-item>
+        <!-- <ion-item class="border-top-color">
+            <p>Sexo: {{ vagaDetalheEntity.sexoFormat }}</p>
+        </ion-item> -->
+        <ion-item class="border-top-color">
+            <p><strong>Nível de idioma Japonês exigido</strong></p>
+            <p>Grau de entendimento:{{ vagaDetalhe.grauEntendimentoEnum }}</p>
+            <p>Grau de escrita: {{ vagaDetalhe.grauEscritaEnum }}</p>
+            <p>Grau de fala: {{ vagaDetalhe.grauFalaEnum }}</p>
+
+        </ion-item>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,29 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        <ion-title>
+            <span>{{ 'VAGA_DETALHE' | translate }}</span>
+        </ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="content-stable">
+
+    <ion-card text-wrap>
+        <ion-item>
+            <!-- <p>{{ 'SERVICO' | translate}}: {{ vagaDetalheEntity.nomeTipoServico }}</p> -->
+            <p>{{ vagaDetalheEntity.nome }}</p>
+            <p>{{ vagaDetalheEntity.nomeEmpresa }}</p>
+            <p>{{ vagaDetalheEntity.nomeFornecedor }}</p>
+            <p>{{ vagaDetalheEntity.cidade }}</p>
+        </ion-item>
+        <ion-item class="border-top-color">
+
+        </ion-item>
+    </ion-card>
+</ion-content>
