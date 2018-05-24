@@ -13,7 +13,6 @@ export class UsuarioService {
   private options = new RequestOptions({ headers: this.headers, method: "post" });
   private usuarioEntity: UsuarioEntity;
   public userChangeEvent = new EventEmitter();
-  public emailPessoaChangeEvent = new EventEmitter();
   public tipoUsuarioChangeEvent = new EventEmitter();
 
   // private _token: number;
@@ -44,6 +43,7 @@ export class UsuarioService {
             // this.tipoUsuarioChangeEvent.emit(data.tipoUsuario);
             // this.qtdTicketFornecedorChangeEvent.emit(data.qtdTicketFornecedor);
             // this.nativeStorage.setItem('previousPage', 'MeusDadosPage');
+            console.log(data);
           }, (err) => {
             reject(err.json());
           });
@@ -136,9 +136,6 @@ export class UsuarioService {
                 this._storage.set(Constants.ID_USUARIO, data.idUsuario);
                 this._storage.set(Constants.NOME_PESSOA, data.nomePessoa);
                 this._storage.set(Constants.IS_CADASTRO_COMPLETO, data.isCadastroCompleto);
-                this.userChangeEvent.emit(usuarioEntity.nomePessoa);
-                console.log(data);
-                this.emailPessoaChangeEvent.emit(usuarioEntity.emailUsuario);
               }, (err) => {
                 // reject(err.json());
               });

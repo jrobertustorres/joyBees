@@ -210,6 +210,7 @@ export class MenuPage implements OnInit{
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
+      console.log(imageData);
       this.cameraUrl = 'data:image/jpeg;base64,' + imageData;
       this._storage.set(Constants.CAMERA_URL, this.cameraUrl);
       // localStorage.setItem(Constants.CAMERA_URL, this.cameraUrl);
@@ -217,6 +218,7 @@ export class MenuPage implements OnInit{
       this.photoTaken = false;
       this.callCadastraImagemUsuario(this.cameraUrl);
 
+      console.log(this.cameraUrl);
     }, (err) => {
     });
   }
@@ -234,14 +236,22 @@ export class MenuPage implements OnInit{
       this.photoSelected = false;
       this.callCadastraImagemUsuario(this.cameraData);
 
+      console.log(this.cameraData);
     }, (err) => {
     });
   }
 
   constroiMenu() {
+    // this.getLanguage();
     this.languageProvider.languageChangeEvent.subscribe(selectedLanguage => {
       this.selectedLanguage = selectedLanguage;
+      // this._storage.set('selectedLanguage', this.selectedLanguage);
       localStorage.setItem(Constants.IDIOMA_USUARIO, selectedLanguage);
+      console.log(localStorage.getItem(Constants.IDIOMA_USUARIO));
+
+      // localStorage.setItem('selectedLanguage', this.selectedLanguage);
+
+      console.log(this.selectedLanguage);
       this.getLanguage(); // aqui temos a chamar novamente para funcionar a alteração da linguagem
       // this.pages = [
       //   { title: this.vagas, component: PrincipalPage, isVisible: true, icon: 'ios-search' },
@@ -304,7 +314,12 @@ export class MenuPage implements OnInit{
       });
       this.loading.present();
 
+      // let idUsuario: any;
+      // idUsuario = localStorage.getItem(Constants.ID_USUARIO);
       this.usuarioEntity.idUsuario = idUsuario;
+      // this.usuarioEntity.idUsuario = this._idUsuario;
+      console.log(this.usuarioEntity.idUsuario);
+
       this.loginService.loginByIdService(this.usuarioEntity)
         .then((usuarioEntityResult: UsuarioEntity) => {
           this.rootPage = PrincipalPage;
@@ -329,12 +344,14 @@ export class MenuPage implements OnInit{
   getFotoPerfil() {
 
     this._storage.get(Constants.CAMERA_DATA).then((cameraData) => {
+      console.log(cameraData);
       if(cameraData){
         this.cameraData = cameraData;
         this.photoTaken = true;
         this.photoSelected = false;
       } else {
         this._storage.get(Constants.CAMERA_URL).then((cameraUrl) => {
+          console.log(cameraUrl);
           if(cameraUrl){
             this.cameraUrl = cameraUrl;
             this.photoTaken = false;
@@ -347,6 +364,27 @@ export class MenuPage implements OnInit{
       }
     });
 
+
+
+    // if (localStorage.getItem(Constants.CAMERA_DATA)!=null) {
+    //   this.cameraData = localStorage.getItem(Constants.CAMERA_DATA);
+    //   this.photoTaken = true;
+    //   this.photoSelected = false;
+
+    // console.log(this._idioma);
+    //   console.log('1');
+
+    // }else if (localStorage.getItem(Constants.CAMERA_URL)!=null){
+    //     this.cameraUrl = localStorage.getItem(Constants.CAMERA_URL);
+    //     this.photoTaken = false;
+    //     this.photoSelected = true;
+    //     console.log('2');
+
+    // } else {
+    //   this.photoTaken = false;
+    //   this.photoSelected = false;
+    //   console.log('3');
+    // }
   }
 
   logout() {

@@ -103,6 +103,7 @@ export class DetalheVagaPage {
       this.vagaService.findVagaDetalhe(this.vagaDetalheEntity)
         .then((vagaDetalheEntityResult: VagaDetalheEntity) => {
           this.vagaDetalheEntity = vagaDetalheEntityResult;
+          console.log(this.vagaDetalheEntity);
           this.loading.dismiss();
         }, (err) => {
           this.loading.dismiss();

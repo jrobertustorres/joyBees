@@ -27,22 +27,19 @@ export class LoginService {
       this.usuarioEntity = usuarioEntity;
       this.usuarioEntity.tokenPush = localStorage.getItem('tokenPush');
       return new Promise((resolve, reject) => {
-        console.log(usuarioEntity);
         this.http.post(Constants.API_URL + 'login/', JSON.stringify(this.usuarioEntity), this.options)
           .map(res=>res.json())
           .subscribe(data => {
             resolve(data);
-            console.log(data);
             this._storage.set(Constants.ID_USUARIO, data.idUsuario);
             this._storage.set(Constants.TOKEN_USUARIO, data.token);
             this._storage.set(Constants.NOME_PESSOA, data.nomePessoa);
             this._storage.set(Constants.CAMERA_DATA, data.imagemPessoaBs64);
             this._storage.set(Constants.IS_CADASTRO_COMPLETO, data.isCadastroCompleto);
+            data.idiomaUsuario = data.idiomaUsuario == 'Português' ? 'pt-br' : 'en';
             localStorage.setItem(Constants.IDIOMA_USUARIO, data.idiomaUsuario);
             localStorage.setItem(Constants.TOKEN_USUARIO, data.token);
 
-            // localStorage.setItem(Constants.ID_USUARIO, data.idUsuario);
-            // localStorage.setItem(Constants.NOME_PESSOA, data.nomePessoa);
             this.userChangeEvent.emit(data.nomePessoa);
             this.emailPessoaChangeEvent.emit(data.login);
           }, (err) => {
@@ -72,20 +69,11 @@ export class LoginService {
             this._storage.set(Constants.NOME_PESSOA, data.nomePessoa);
             this._storage.set(Constants.IS_CADASTRO_COMPLETO, data.isCadastroCompleto);
             data.idiomaUsuario = data.idiomaUsuario == 'Português' ? 'pt-br' : 'en';
-            // this._storage.set('selectedLanguage', data.idiomaUsuario);
-            // this._storage.set(Constants.IDIOMA_USUARIO, data.idiomaUsuario);
             localStorage.setItem(Constants.IS_CADASTRO_COMPLETO, data.isCadastroCompleto);
             localStorage.setItem(Constants.IDIOMA_USUARIO, data.idiomaUsuario);
             localStorage.setItem(Constants.TOKEN_USUARIO, data.token);
-            // localStorage.setItem(Constants.ID_USUARIO, data.idUsuario);
-            // localStorage.setItem(Constants.NOME_PESSOA, data.nomePessoa);
             this.userChangeEvent.emit(data.nomePessoa);
             this.emailPessoaChangeEvent.emit(data.login);
-
-            // this._storage.get('selectedLanguage').then((selectedLanguage) => {
-            //   console.log(selectedLanguage);
-            // });
-
 
           }, (err) => {
             // reject(err.json());
@@ -118,11 +106,6 @@ export class LoginService {
             this._storage.set(Constants.IS_CADASTRO_COMPLETO, data.isCadastroCompleto);
             localStorage.setItem(Constants.IDIOMA_USUARIO, data.idiomaUsuario);
             localStorage.setItem(Constants.TOKEN_USUARIO, data.token);
-            // localStorage.setItem(Constants.CAMERA_DATA, data.imagemPessoaBs64);
-            // localStorage.setItem(Constants.CAMERA_URL, data.imagemPessoaBs64);
-
-            // localStorage.setItem(Constants.ID_USUARIO, data.idUsuario);
-            // localStorage.setItem(Constants.NOME_PESSOA, data.nomePessoa);
             this.userChangeEvent.emit(data.nomePessoa);
             this.emailPessoaChangeEvent.emit(data.login);
           }, (err) => {

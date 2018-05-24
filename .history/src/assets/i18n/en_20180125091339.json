@@ -1,9 +1,0 @@
-{
-    "HELLO": "Hello from Ionic",
-    "I18N_EXAMPLE": "i18n example",
-    "STRING_WITH_PARAMS": "String with a parameter: {{value}}",
-    "INNER_CONTENT": "Inner content with a param: {{value}}",
-    "REGISTER_TEXT": "Register in a few seconds or login and get instant vacancies",
-    "VAGAS_DESTAQUE": "Featured Jobs"
-
-}

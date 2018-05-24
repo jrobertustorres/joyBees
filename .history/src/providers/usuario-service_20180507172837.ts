@@ -137,7 +137,6 @@ export class UsuarioService {
                 this._storage.set(Constants.NOME_PESSOA, data.nomePessoa);
                 this._storage.set(Constants.IS_CADASTRO_COMPLETO, data.isCadastroCompleto);
                 this.userChangeEvent.emit(usuarioEntity.nomePessoa);
-                console.log(data);
                 this.emailPessoaChangeEvent.emit(usuarioEntity.emailUsuario);
               }, (err) => {
                 // reject(err.json());

@@ -2,26 +2,11 @@
     <ion-header style="background-color: #484848;">
 
         <ion-card text-center class="hide-card" style="background-color: #484848;">
-            <!-- <img src="http://placehold.it/300x200" *ngIf="!base64Image" class="custom-avatar" /> -->
-            <!-- <img src="http://placehold.it/300x200" *ngIf="!photoTaken && !photoSelected" class="custom-avatar" /> -->
             <div (click)="takePicture()" class="custom-avatar">
-
                 <img src="assets/imgs/no-img.png" *ngIf="!cameraData && !cameraUrl" class="custom-avatar" />
-                <img [src]="sanitizer.bypassSecurityTrustUrl(cameraData)" *ngIf="photoTaken || cameraData" class="custom-avatar" />
-                <img [src]="sanitizer.bypassSecurityTrustUrl(cameraUrl)" *ngIf="photoSelected || cameraUrl" class="custom-avatar" />
-                <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(usuarioDetalheVagaEntity.imagemPessoaBs64)" *ngIf="usuarioDetalheVagaEntity.imagemPessoaBs64" class="custom-avatar" /> -->
-
-                <!-- <img src="assets/imgs/no-img.png" *ngIf="!photoTaken && !photoSelected" class="custom-avatar" />
-                <img src="{{cameraData}}" *ngIf="photoTaken" class="custom-avatar" />
-                <img src="{{cameraUrl}}" *ngIf="photoSelected" class="custom-avatar" /> -->
+                <img [src]="sanitizer.bypassSecurityTrustUrl(cameraData)" *ngIf="cameraData" class="custom-avatar" />
+                <img [src]="sanitizer.bypassSecurityTrustUrl(cameraUrl)" *ngIf="cameraUrl" class="custom-avatar" />
             </div>
-            <!-- <img [style.background-image]="cameraUrl" *ngIf="photoSelected" class="custom-avatar" style="background-size: cover;" /> -->
-            <!-- <img [src]='sanitizer.bypassSecurityTrustUrl({{cameraUrl}})' *ngIf="photoSelected" class="custom-avatar" /> -->
-
-            <!-- <img src="cameraUrl" *ngIf="!cameraUrl" class="custom-avatar" /> -->
-            <!-- <img src="base64Image" *ngIf="base64Image" /> -->
-            <!-- <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(cameraData)" *ngIf="photoTaken"> -->
-            <!-- <img src="cameraUrl/300x200" *ngIf="photoSelected" class="custom-avatar"> -->
 
             <h2 style="color: #FDB413">{{ nomePessoa }}</h2>
             <p style="color: #FDB413">{{ loginPessoa }}</p>

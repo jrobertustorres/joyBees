@@ -7,7 +7,7 @@ export const availableLanguages = [{
   }];
   
   export const defaultLanguage = 'en';
-
+  
   export const sysOptions = {
     systemLanguage: defaultLanguage
   };

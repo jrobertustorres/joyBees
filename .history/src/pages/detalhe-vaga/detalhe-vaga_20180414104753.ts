@@ -92,6 +92,8 @@ export class DetalheVagaPage {
   callDetalheVaga() {
     try {
 
+      console.log('aaa');
+      
       this.loading = this.loadingCtrl.create({
         content: this.loadingText
       });

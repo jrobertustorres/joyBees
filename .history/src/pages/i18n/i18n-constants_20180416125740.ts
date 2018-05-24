@@ -1,13 +1,15 @@
 export const availableLanguages = [{
     code: 'en',
-    name: 'English'
+    name: 'en'
+    // name: 'English'
   }, {
     code: 'pt-br',
-    name: 'Português'
+    name: 'pt-br'
+    // name: 'Português'
   }];
   
   export const defaultLanguage = 'en';
-
+  
   export const sysOptions = {
     systemLanguage: defaultLanguage
   };

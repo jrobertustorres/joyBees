@@ -17,7 +17,6 @@ export class Constants {
   public static CAMERA_URL = 'camera_url';
   public static ID_VAGA_CANDIDATAR = 'id_vaga_candidatar';
   public static IS_CADASTRO_COMPLETO = 'is_cadastro_completo';
-  public static APP_NAME = 'app_name';
-  public static VERSION_CODE = 'version_code';
-  public static VERSION_NUMBER = 'version_number';
+  // public static TIPO_USUARIO_SELECIONADO = 'tipo_usuario_selecionado';
+  // public static QTD_TICKET_FORNECEDOR = 'qtd_ticket_fornecedor';
 }

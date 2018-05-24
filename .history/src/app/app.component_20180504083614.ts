@@ -41,13 +41,22 @@ export class MyApp {
               private appVersion: AppVersion,
               public push: Push) {
     this.initializeApp();
-    // if (this.platform.is('cordova')) {
-      // localStorage.setItem(Constants.APP_NAME, appName);
-      // this._storage.set(Constants.APP_NAME, this.appVersion.getAppName());
-      // this._storage.set(Constants.VERSION_CODE, this.appVersion.getVersionCode());
-      // this._storage.set(Constants.VERSION_NUMBER, this.appVersion.getVersionNumber());
-    // }
+    if (this.platform.is('cordova')) {
+      this._storage.set(Constants.APP_NAME, this.appVersion.getAppName());
+      this._storage.set(Constants.VERSION_CODE, this.appVersion.getVersionCode());
+      this._storage.set(Constants.VERSION_NUMBER, this.appVersion.getVersionNumber());
+    }
 
+    this._storage.get(Constants.APP_NAME).then((appName) => {
+      console.log(appName);
+    });
+    this._storage.get(Constants.APP_NAME).then((versionCode) => {
+      console.log(versionCode);
+    });
+    this._storage.get(Constants.APP_NAME).then((versionNumber) => {
+      console.log(versionNumber);
+    });
+    
     this.translate = translate;
   }
 
@@ -148,13 +157,12 @@ export class MyApp {
 
   getLanguage(){
     this._idioma = sysOptions.systemLanguage == 'pt-br' ? 'pt-br' : 'en';
-    // this._storage.get('selectedLanguage').then((selectedLanguage) => {
-        if(!localStorage.getItem('selectedLanguage')){
+    this._storage.get('selectedLanguage').then((selectedLanguage) => {
+        if(!selectedLanguage){
           this.selectedLanguage = this._idioma;
         }
-        // else if(selectedLanguage) {
-        else if(localStorage.getItem('selectedLanguage')) {
-          this.selectedLanguage = localStorage.getItem('selectedLanguage');
+        else if(selectedLanguage) {
+          this.selectedLanguage = selectedLanguage;
           if (this.selectedLanguage == 'pt-br') {
             this.titleConection = 'Conexão de internet!';
             this.subTitleConection = 'Você está offline. Verifique sua conexão de rede!';
@@ -165,7 +173,7 @@ export class MyApp {
         }
         this.translate.use(this.selectedLanguage);
 
-      // });
+      });
 
 
     // if (this.selectedLanguage == 'pt-br') {

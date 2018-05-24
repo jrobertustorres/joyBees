@@ -6,9 +6,9 @@
             <!-- <img src="http://placehold.it/300x200" *ngIf="!photoTaken && !photoSelected" class="custom-avatar" /> -->
             <div (click)="takePicture()" class="custom-avatar">
 
-                <img src="assets/imgs/no-img.png" *ngIf="!cameraData && !cameraUrl" class="custom-avatar" />
-                <img [src]="sanitizer.bypassSecurityTrustUrl(cameraData)" *ngIf="photoTaken || cameraData" class="custom-avatar" />
-                <img [src]="sanitizer.bypassSecurityTrustUrl(cameraUrl)" *ngIf="photoSelected || cameraUrl" class="custom-avatar" />
+                <img src="assets/imgs/no-img.png" *ngIf="!cameraData || !cameraUrl" class="custom-avatar" />
+                <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(cameraData)" *ngIf="cameraData" class="custom-avatar" /> -->
+                <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(cameraUrl)" *ngIf="cameraUrl" class="custom-avatar" /> -->
                 <!-- <img [src]="sanitizer.bypassSecurityTrustUrl(usuarioDetalheVagaEntity.imagemPessoaBs64)" *ngIf="usuarioDetalheVagaEntity.imagemPessoaBs64" class="custom-avatar" /> -->
 
                 <!-- <img src="assets/imgs/no-img.png" *ngIf="!photoTaken && !photoSelected" class="custom-avatar" />

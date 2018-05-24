@@ -41,12 +41,12 @@ export class MyApp {
               private appVersion: AppVersion,
               public push: Push) {
     this.initializeApp();
-    // if (this.platform.is('cordova')) {
+    if (this.platform.is('cordova')) {
       // localStorage.setItem(Constants.APP_NAME, appName);
       // this._storage.set(Constants.APP_NAME, this.appVersion.getAppName());
       // this._storage.set(Constants.VERSION_CODE, this.appVersion.getVersionCode());
       // this._storage.set(Constants.VERSION_NUMBER, this.appVersion.getVersionNumber());
-    // }
+    }
 
     this.translate = translate;
   }

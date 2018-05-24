@@ -259,8 +259,7 @@ export class HomePage {
     if(!this.selectedLanguage){
       this.selectedLanguage = this._idioma;
     }
-    // else if(this.selectedLanguage) {
-    if(this.selectedLanguage) {
+    else if(this.selectedLanguage) {
       // this.selectedLanguage = this.selectedLanguage;
       if (this.selectedLanguage == 'pt-br') {
         this.loadingText = 'Procurando vagas...';
