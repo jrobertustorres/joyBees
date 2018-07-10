@@ -16,6 +16,8 @@ import { LanguageTranslateService } from '../../providers/language-translate-ser
 })
 export class ModalInformacoesPorSevicoPage {
   private idServico: number;
+  private nomeServico: string;
+  private quantidadeObrigatorio: string;
   public lancarOrcamentoForm: FormGroup;
   public dataSolicitacao: string;
   public languageDictionary: any;
@@ -29,6 +31,8 @@ export class ModalInformacoesPorSevicoPage {
               public viewCtrl: ViewController) {
     this.orcamentoEntity = new OrcamentoEntity();
     this.idServico = navParams.get('idServico');
+    this.nomeServico = navParams.get('nomeServico');
+    this.quantidadeObrigatorio = navParams.get('quantidadeObrigatorio');
   }
 
   ngOnInit() {

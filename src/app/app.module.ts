@@ -55,6 +55,9 @@ import { NovoOrcamentoPage } from '../pages/novo-orcamento/novo-orcamento';
 import { OrcamentosListByStatusPage } from '../pages/orcamentos-list-by-status/orcamentos-list-by-status';
 import { DetalheCotacaoPage } from '../pages/detalhe-cotacao/detalhe-cotacao';
 import { ModalInformacoesPorSevicoPage } from '../pages/modal-informacoes-por-sevico/modal-informacoes-por-sevico';
+import { CotacoesRespondidasListPage } from '../pages/cotacoes-respondidas-list/cotacoes-respondidas-list';
+import { DetalhaServicoOrcamentoByUsuarioPage } from '../pages/detalha-servico-orcamento-by-usuario/detalha-servico-orcamento-by-usuario';
+import { ModalImagemFornecedorPage } from '../pages/modal-imagem-fornecedor/modal-imagem-fornecedor';
 
 //ENTITYS
 import { UsuarioDetalheEntity } from '../model/usuario-detalhe-entity';
@@ -70,7 +73,12 @@ import { CotacaoEntity } from '../model/cotacao-entity';
 import { DetalheServicoOrcamentoEntity } from '../model/detalhe-servico-orcamento-entity';
 import { DetalheOrcamentoEntity } from '../model/detalhe-orcamento-entity';
 import { CockpitCotacaoEntity } from '../model/cockpit-cotacao-entity';
-import { FiltroEntity } from '../model/filtro-entity';
+import { AvaliaCotacaoEntity } from '../model/avalia-cotacao-entity';
+import { DetalheCotacaoEntity } from '../model/detalhe-cotacao-entity';
+import { FornecedorEntity } from '../model/fornecedor-entity';
+import { ImagemServicoFornecedorEntity } from '../model/imagem-servico-fornecedor-entity';
+import { CotacaoOrcamentoUsuarioEntity } from '../model/cotacao-orcamento-usuario-entity';
+import { PublicidadePropagandaEntity } from '../model/publicidade-propaganda-entity';
 
 //SERVICES
 import { EstadosService } from '../providers/estados-service';
@@ -82,6 +90,8 @@ import { LanguageTranslateService } from '../providers/language-translate-servic
 import { TipoServicoService } from '../providers/tipo-servico-service';
 import { ServicoService } from '../providers/servico-service';
 import { OrcamentoService } from '../providers/orcamento-service';
+import { FornecedorService } from '../providers/fornecedor-service';
+import { PublicidadePropagandaService } from '../providers/publicidade-propaganda-service';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -119,7 +129,10 @@ function provideStorage() {
     NovoOrcamentoPage,
     OrcamentosListByStatusPage,
     DetalheCotacaoPage,
-    ModalInformacoesPorSevicoPage
+    ModalInformacoesPorSevicoPage,
+    CotacoesRespondidasListPage,
+    DetalhaServicoOrcamentoByUsuarioPage,
+    ModalImagemFornecedorPage
   ],
   imports: [
     HttpModule,
@@ -162,7 +175,10 @@ function provideStorage() {
     NovoOrcamentoPage,
     OrcamentosListByStatusPage,
     DetalheCotacaoPage,
-    ModalInformacoesPorSevicoPage
+    ModalInformacoesPorSevicoPage,
+    CotacoesRespondidasListPage,
+    DetalhaServicoOrcamentoByUsuarioPage,
+    ModalImagemFornecedorPage
   ],
   providers: [
     StatusBar,
@@ -183,6 +199,8 @@ function provideStorage() {
     LoginService,
     VagaService,
     LanguageTranslateService,
+    FornecedorService,
+    PublicidadePropagandaService,
     UsuarioDetalheEntity,
     CidadeEntity,
     Network,
@@ -199,7 +217,12 @@ function provideStorage() {
     DetalheServicoOrcamentoEntity,
     DetalheOrcamentoEntity,
     CockpitCotacaoEntity,
-    FiltroEntity,
+    AvaliaCotacaoEntity,
+    DetalheCotacaoEntity,
+    FornecedorEntity,
+    ImagemServicoFornecedorEntity,
+    CotacaoOrcamentoUsuarioEntity,
+    PublicidadePropagandaEntity,
     Push,
     Geolocation,
     Diagnostic,

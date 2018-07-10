@@ -160,14 +160,14 @@ export class NovoOrcamentoPage {
       
   }
 
-  servicosChecked(idServico) {
+  servicosChecked(idServico, nomeServico, quantidadeObrigatorio) {
     let index = this.servicosSelecionados.indexOf(idServico);
 
     if (index != -1) {
       this.servicosSelecionados.splice(index, 1);
     } else {
       this.servicosSelecionados.push(idServico);
-      this.openModalMaisInformacoes(idServico);
+      this.openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio);
     }
 
   }
@@ -283,8 +283,8 @@ export class NovoOrcamentoPage {
     prompt.present();
   }
 
-  openModalMaisInformacoes(idServico){
-    let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServico: idServico});
+  openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio){
+    let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServico: idServico, nomeServico: nomeServico, quantidadeObrigatorio: quantidadeObrigatorio});
 
     modal.onDidDismiss((data) => {
       if (data) {

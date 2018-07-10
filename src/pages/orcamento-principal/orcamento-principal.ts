@@ -6,7 +6,8 @@ import { OrcamentoService } from './../../providers/orcamento-service';
 import { LanguageTranslateService } from '../../providers/language-translate-service';
 
 //ENTITYS
-import { CockpitCotacaoEntity } from '../../model/cockpit-cotacao-entity';
+// import { CockpitCotacaoEntity } from '../../model/cockpit-cotacao-entity';
+import { CotacaoOrcamentoUsuarioEntity } from '../../model/cotacao-orcamento-usuario-entity';
 
 //PAGES
 import { NovoOrcamentoPage } from './../novo-orcamento/novo-orcamento';
@@ -18,7 +19,8 @@ import { OrcamentosListByStatusPage } from '../orcamentos-list-by-status/orcamen
   templateUrl: 'orcamento-principal.html',
 })
 export class OrcamentoPrincipalPage {
-  private cockpitCotacaoEntity: CockpitCotacaoEntity;
+  // private cockpitCotacaoEntity: CockpitCotacaoEntity;
+  private cotacaoOrcamentoUsuarioEntity: CotacaoOrcamentoUsuarioEntity;
   private loading = null;
   public languageDictionary: any;
 
@@ -28,7 +30,8 @@ export class OrcamentoPrincipalPage {
               private orcamentoService: OrcamentoService,
               private languageTranslateService: LanguageTranslateService,
               public navParams: NavParams) {
-    this.cockpitCotacaoEntity = new CockpitCotacaoEntity();
+    // this.cockpitCotacaoEntity = new CockpitCotacaoEntity();
+    this.cotacaoOrcamentoUsuarioEntity = new CotacaoOrcamentoUsuarioEntity();
   }
 
   ngOnInit() {
@@ -46,6 +49,11 @@ export class OrcamentoPrincipalPage {
       .subscribe(dados => {
         this.languageDictionary = dados;
         this.getCockpitCotacaoByUsuario();
+        
+        this.loading = this.loadingCtrl.create({
+        content: this.languageDictionary.LOADING_TEXT
+      });
+      this.loading.present();
       });
     }
     catch (err){
@@ -66,16 +74,16 @@ export class OrcamentoPrincipalPage {
 
   getCockpitCotacaoByUsuario() {
     try {
-      this.loading = this.loadingCtrl.create({
-        content: this.languageDictionary.LOADING_TEXT
-      });
-      this.loading.present();
+      // this.loading = this.loadingCtrl.create({
+      //   content: this.languageDictionary.LOADING_TEXT
+      // });
+      // this.loading.present();
 
       this.orcamentoService.findCockpitCotacaoByUsuario()
-      .then((cockpitCotacaoServiceResult: CockpitCotacaoEntity) => {
-        this.cockpitCotacaoEntity = cockpitCotacaoServiceResult;
+      .then((cockpitCotacaoServiceResult: CotacaoOrcamentoUsuarioEntity) => {
+        this.cotacaoOrcamentoUsuarioEntity = cockpitCotacaoServiceResult;
 
-        console.log(this.cockpitCotacaoEntity);
+        console.log(this.cotacaoOrcamentoUsuarioEntity);
 
         this.loading.dismiss();
       }, (err) => {

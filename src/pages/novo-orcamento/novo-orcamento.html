@@ -27,7 +27,7 @@
                 <ion-label *ngIf="listServicoRespostaChild">
                     <label style="font-size: 14px; width: 70%; overflow: hidden; text-overflow: ellipsis;">{{ child.servico }}</label>
                 </ion-label>
-                <ion-checkbox color="dark" [checked]="child.serviceChecked" (click)="servicosChecked(child.idServico);"></ion-checkbox>
+                <ion-checkbox color="dark" [checked]="child.serviceChecked" (click)="servicosChecked(child.idServico, child.servico, child.quantidadeObrigatorio);"></ion-checkbox>
 
             </ion-list-header>
         </ion-list>

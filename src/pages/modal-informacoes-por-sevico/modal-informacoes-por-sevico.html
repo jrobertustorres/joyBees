@@ -12,7 +12,9 @@
 </ion-header>
 
 <ion-content padding>
-    <p text-wraper>Você pode escolher uma data para o atendimento e uma observação, caso ache necessário.</p>
+    <div style="text-align: center;"><span><b>{{ nomeServico }}</b></span></div>
+    <!-- <p text-wraper>Você pode escolher uma data para o atendimento e uma observação, caso ache necessário.</p> -->
+    <div style="text-align: center;"><p text-wraper>{{ 'LABEL_MAIS_DETALHES' | translate }}</p></div>
     <form [formGroup]="lancarOrcamentoForm" (ngSubmit)="submeterOrcamento()">
 
         <ion-item (click)="selecionaDataSolicitacao()">
@@ -22,15 +24,15 @@
             <!-- <ion-datetime formControlName="dataSolicitacao" disabled="true" name="dataSolicitacao" displayFormat="DD/MM/YYYY" [(ngModel)]="orcamentoEntity.dataSolicitacao"></ion-datetime> -->
         </ion-item>
 
-        <ion-item>
-            <ion-label stacked>Quantidade</ion-label>
+        <ion-item *ngIf="quantidadeObrigatorio">
+            <ion-label stacked>{{ 'QTD_SERVICO' | translate }}</ion-label>
             <ion-input formControlName="quantidade" color="dark" maxLength="100" [(ngModel)]="orcamentoEntity.quantidade" type="number" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
         </ion-item>
         <!-- <div *ngIf="!lancarOrcamentoForm.get('quantidade').valid && lancarOrcamentoForm.get('quantidade').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div> -->
         <div *ngIf="lancarOrcamentoForm.get('quantidade').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_100_CARACTERES' | translate }}</div>
 
         <ion-item>
-            <ion-label stacked>Observação</ion-label>
+            <ion-label stacked>{{ 'OBSERVACAO' | translate }}</ion-label>
             <ion-textarea formControlName="descricao" color="dark" maxLength="100" [(ngModel)]="orcamentoEntity.descricao" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-textarea>
         </ion-item>
         <!-- <div *ngIf="!lancarOrcamentoForm.get('descricao').valid && lancarOrcamentoForm.get('descricao').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div> -->

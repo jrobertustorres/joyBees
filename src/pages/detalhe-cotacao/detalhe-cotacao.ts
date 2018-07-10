@@ -2,15 +2,17 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, ModalController, FabContainer } from 'ionic-angular';
 
 //ENTITYS
-import { CotacaoEntity } from '../../model/cotacao-entity';
-import { DetalheOrcamentoEntity } from './../../model/detalhe-orcamento-entity';
+// import { CotacaoEntity } from '../../model/cotacao-entity';
+import { DetalheCotacaoEntity } from '../../model/detalhe-cotacao-entity';
 
 //SERVICES
 import { OrcamentoService } from '../../providers/orcamento-service';
 import { LanguageTranslateService } from '../../providers/language-translate-service';
 
 //PAGES
-// import { HomePage } from '../home/home';
+// import { PrincipalPage } from '../principal/principal';
+import { OrcamentoPrincipalPage } from '../orcamento-principal/orcamento-principal';
+import { ModalImagemFornecedorPage } from '../modal-imagem-fornecedor/modal-imagem-fornecedor';
 
 @IonicPage()
 @Component({
@@ -18,10 +20,11 @@ import { LanguageTranslateService } from '../../providers/language-translate-ser
   templateUrl: 'detalhe-cotacao.html',
 })
 export class DetalheCotacaoPage {
-  private cotacaoEntity: CotacaoEntity;
-  private detalheOrcamentoEntity: DetalheOrcamentoEntity;
-  public idOrcamento: number;
-  public idFornecedor: number;
+  // private cotacaoEntity: CotacaoEntity;
+  private detalheCotacaoEntity: DetalheCotacaoEntity;
+  public idCotacao: number;
+  // public idFornecedor: number;
+  public idServicoFornecedor: number;
   private loading = null;
   public languageDictionary: any;
 
@@ -33,9 +36,10 @@ export class DetalheCotacaoPage {
               private toastCtrl: ToastController,
               private languageTranslateService: LanguageTranslateService,
               public navParams: NavParams) {
-    this.cotacaoEntity = new CotacaoEntity();
-    this.detalheOrcamentoEntity = new DetalheOrcamentoEntity();
-    this.idOrcamento = navParams.get('idOrcamento');
+    // this.cotacaoEntity = new CotacaoEntity();
+    // this.detalheOrcamentoEntity = new DetalheOrcamentoEntity();
+    this.detalheCotacaoEntity = new DetalheCotacaoEntity();
+    this.idCotacao = navParams.get('idCotacao');
   }
 
   ngOnInit() {
@@ -84,13 +88,15 @@ export class DetalheCotacaoPage {
       });
       this.loading.present();
 
-      this.detalheOrcamentoEntity = new DetalheOrcamentoEntity();
-      this.detalheOrcamentoEntity.idOrcamento = this.idOrcamento;
+      this.detalheCotacaoEntity.idCotacao = this.idCotacao;
 
-      this.orcamentoService.detalhaOrcamentoByUsuario(this.detalheOrcamentoEntity)
-      .then((detalheCotacaoEntityResult: DetalheOrcamentoEntity) => {
-        this.detalheOrcamentoEntity = detalheCotacaoEntityResult;
-        // this.idFornecedor = this.detalheOrcamentoEntity.idFornecedor;
+      this.orcamentoService.detalhaCotacao(this.detalheCotacaoEntity)
+      .then((detalheCotacaoEntityResult: DetalheCotacaoEntity) => {
+        this.detalheCotacaoEntity = detalheCotacaoEntityResult;
+        // this.idFornecedor = this.detalheCotacaoEntity.idFornecedor;
+
+        this.idServicoFornecedor = this.detalheCotacaoEntity.idServicoFornecedor;
+        console.log(this.detalheCotacaoEntity);
 
         this.loading.dismiss();
     }, (err) => {
@@ -121,7 +127,7 @@ export class DetalheCotacaoPage {
         {
           text: this.languageDictionary.BTN_CONFIRMAR,
           handler: () => {
-            // this.escolherCotacao(fab);
+            this.escolherCotacao(fab);
           }
         }
       ]
@@ -129,30 +135,30 @@ export class DetalheCotacaoPage {
     confirm.present();
   }
 
-  // escolherCotacao(fab) {
-  //   fab.close();
-  //   this.detalheCotacaoEntity.idCotacao = this.idCotacao;
+  escolherCotacao(fab) {
+    fab.close();
+    this.detalheCotacaoEntity.idCotacao = this.idCotacao;
 
-  //   this.loading = this.loadingCtrl.create({
-  //     content: 'Aguarde...'
-  //   });
-  //   this.loading.present();
+    this.loading = this.loadingCtrl.create({
+      content: this.languageDictionary.LOADING_TEXT
+    });
+    this.loading.present();
 
-  //   this.orcamentoService.escolherCotacao(this.detalheCotacaoEntity)
-  //     .then((detalheCotacaoEntityResult: DetalheCotacaoEntity) => {
-  //       this.loading.dismiss();
-  //       this.presentToast();
-  //       setTimeout(() => {
-  //       this.navCtrl.setRoot(HomePage);
-  //       }, 3000);
-  //     }, (err) => {
-  //       this.loading.dismiss();
-  //       this.alertCtrl.create({
-  //         subTitle: err.message,
-  //         buttons: ['OK']
-  //       }).present();
-  //     });
-  // }
+    this.orcamentoService.escolherCotacao(this.detalheCotacaoEntity)
+      .then((detalheCotacaoEntityResult: DetalheCotacaoEntity) => {
+        this.loading.dismiss();
+        this.presentToast();
+        setTimeout(() => {
+        this.navCtrl.setRoot(OrcamentoPrincipalPage);
+        }, 3000);
+      }, (err) => {
+        this.loading.dismiss();
+        this.alertCtrl.create({
+          subTitle: err.message,
+          buttons: ['OK']
+        }).present();
+      });
+  }
 
   // modalAvaliacao(fab: FabContainer) {
   //   if(fab) {
@@ -162,10 +168,11 @@ export class DetalheCotacaoPage {
   //   modal.present();
   // }
 
-  // modalImagensFornecedor(fab: FabContainer) {
-  //   fab.close();
-  //   let modal = this.modalCtrl.create(ModalImagemFornecedorPage, {idFornecedor: this.idFornecedor});
-  //   modal.present();
-  // }
+  modalImagensFornecedor(fab: FabContainer) {
+    fab.close();
+    let modal = this.modalCtrl.create(ModalImagemFornecedorPage, {idServicoFornecedor: this.idServicoFornecedor});
+    // let modal = this.modalCtrl.create(ModalImagemFornecedorPage, {idFornecedor: this.idFornecedor});
+    modal.present();
+  }
 
 }

@@ -42,20 +42,20 @@
     <div padding text-wrap *ngIf="vagasDestaque?.length > 0 && idUsuario==null" style="margin-bottom: -50px; text-align: center;">
         <span>
             <!-- Aqui estão algumas vagas em destaque. Faça login e encontre mais vagas. -->
-            {{ 'VAGAS_DESTAQUE_LABEL' | translate }}
+            <b>{{ 'VAGAS_DESTAQUE_LABEL' | translate }}</b>
         </span>
     </div>
 
     <div [ngSwitch]="segment">
 
         <ion-list *ngSwitchCase="'vagasDestaque'" style="margin-top: 50px;">
-            <ion-refresher (ionRefresh)="doRefreshDestaques($event)" style="margin-top: -50px;">
+            <!-- <ion-refresher (ionRefresh)="doRefreshDestaques($event)" style="margin-top: -50px;">
                 <ion-refresher-content></ion-refresher-content>
-            </ion-refresher>
+            </ion-refresher> -->
             <div class="h2-color-cards" text-wrap padding style="margin-top: 50px;" *ngIf="vagasDestaque?.length == 0">
                 <div style="text-align: center;color: #484848;"><strong>{{ 'SEM_VAGAS_DESTAQUE' | translate }}</strong></div>
                 <div style="text-align: center;">
-                    <ion-icon style="font-size: 30px;color: #484848;" ios="ios-sad" md="md-sad"></ion-icon>
+                    <ion-icon style="font-size: 30px;color: #484848;" ios="md-sad" md="md-sad"></ion-icon>
                 </div>
             </div>
 

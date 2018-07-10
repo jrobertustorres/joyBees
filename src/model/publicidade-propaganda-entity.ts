@@ -1,0 +1,16 @@
+export class PublicidadePropagandaEntity {
+    
+      public idPublicidadePropaganda: number;
+      public idFornecedor: number;
+      public idServicoFornecedor: number;
+      
+      public descricao: string;
+      public imagem: string;
+      public distancia: number;
+      public latitudePes: number;
+      public longitudePes: number;
+
+      constructor(){
+      }
+    
+    }
