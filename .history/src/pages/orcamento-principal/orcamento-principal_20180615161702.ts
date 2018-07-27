@@ -1,0 +1,69 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+//SERVICES
+import { OrcamentoService } from './../../providers/orcamento-service';
+
+//ENTITYS
+import { CockpitCotacaoEntity } from '../../model/cockpit-cotacao-entity';
+
+//PAGES
+import { NovoOrcamentoPage } from './../novo-orcamento/novo-orcamento';
+import { OrcamentosListByStatusPage } from '../orcamentos-list-by-status/orcamentos-list-by-status';
+
+@IonicPage()
+@Component({
+  selector: 'page-orcamento-principal',
+  templateUrl: 'orcamento-principal.html',
+})
+export class OrcamentoPrincipalPage {
+  private cockpitCotacaoEntity: CockpitCotacaoEntity;
+
+  constructor(public navCtrl: NavController, 
+              private orcamentoService: OrcamentoService,
+              public navParams: NavParams) {
+    this.cockpitCotacaoEntity = new CockpitCotacaoEntity();
+  }
+
+  ngOnInit() {
+  }
+
+  ionViewDidLoad() {
+  }
+
+  openCotacoesList(status) {
+    this.navCtrl.push(OrcamentosListByStatusPage, {status: status});
+  }
+
+  novoOrcamento() {
+    this.navCtrl.push(NovoOrcamentoPage);
+  }
+
+  getCockpitCotacaoByUsuario() {
+    try {
+      // this.loading = this.loadingCtrl.create({
+      //   content: 'Aguarde...'
+      // });
+      // this.loading.present();
+
+      this.orcamentoService.findCockpitCotacaoByUsuario()
+      .then((cockpitCotacaoServiceResult: CockpitCotacaoEntity) => {
+        this.cockpitCotacaoEntity = cockpitCotacaoServiceResult;
+
+        // this.loading.dismiss();
+      }, (err) => {
+        // this.loading.dismiss();
+        this.alertCtrl.create({
+          subTitle: err.message,
+          buttons: ['OK']
+        }).present();
+      });
+
+    }catch (err){
+      if(err instanceof RangeError){
+      }
+      console.log(err);
+    }
+  }
+
+}

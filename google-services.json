@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1143021206",
+    "firebase_url": "https://joybees-55f67.firebaseio.com",
+    "project_id": "joybees-55f67",
+    "storage_bucket": "joybees-55f67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1143021206:android:931d43dc3b60e5f3",
+        "android_client_info": {
+          "package_name": "com.logiictecnologia.joybees"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1143021206-1dl8u1nnp8kdb0b8oen83ct3gemeacb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN98342lcxMbvrXTgNaNsoV5gV5cWEbSQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,53 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <ion-title>{{ 'NOVO_ORCAMENTO' | translate }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+    <p *ngIf="listaServicos?.length > 0" style="padding-left: 10px;padding-right: 10px; text-align: center; color: #484848;">
+        <ion-icon ios="ios-search" md="md-search" style="font-size: 24px;"></ion-icon>
+        <span>
+            <b>Encontraremos os melhores fornecedores de produtos/serviços para você!</b>
+        </span>
+    </p>
+
+    <ion-list-header *ngFor="let item of listServicoResposta; let i = index" no-lines no-padding class="list-header-botton">
+        <button ion-item icon-end (click)="toggleSection(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
+            <ion-icon item-left name="add" *ngIf="!item.open"></ion-icon>
+            <ion-icon item-left name="close" *ngIf="item.open"></ion-icon>
+            <span style="font-size: 14px;">{{ item.tipoServico }}</span>
+            <ion-icon name="home" *ngIf="item.temEscolhido"></ion-icon>
+        </button>
+
+        <ion-list *ngIf="item.tipoServico && item.open">
+            <ion-list-header *ngFor="let child of listServicoRespostaChild; let j = index" text-wrap style="height: 70px;">
+                <ion-label *ngIf="listServicoRespostaChild">
+                    <label style="font-size: 14px; width: 70%; overflow: hidden; text-overflow: ellipsis;">{{ child.servico }}</label>
+                </ion-label>
+                <ion-checkbox color="dark" [checked]="child.serviceChecked" (click)="servicosChecked(child.idServico);"></ion-checkbox>
+
+            </ion-list-header>
+        </ion-list>
+    </ion-list-header>
+
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+</ion-content>
+
+<ion-footer *ngIf="listaServicos?.length > 0">
+    <ion-grid>
+        <ion-row>
+            <ion-col no-padding>
+                <button no-margin ion-button full icon-end color="navbarColor" (click)="verificaServicosSelecionados()">
+                    <span class="span-style"  style="font-size: 12px; color: #000;">{{ 'BTN_LANCAR' | translate }}</span>
+                    <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

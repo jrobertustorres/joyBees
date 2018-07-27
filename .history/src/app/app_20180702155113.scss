@@ -1,0 +1,166 @@
+.background-stable {
+    background-color: #FDB413;
+}
+
+.content-stable {
+    background-color: #E8E8E8 !important;
+}
+
+.segment-md .segment-button {
+    color: #484848;
+}
+
+.segment-md .segment-button.activated,
+.segment-md .segment-button.segment-activated {
+    border-color: #484848;
+    opacity: 1;
+}
+
+.span-style-color {
+    color: #484848;
+}
+
+.my-position-button {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-right: 0;
+}
+
+.border-top-color {
+    border-top: 1px solid #c8c8c8;
+}
+
+.item-divider-style {
+    background-color: #f4f4f4;
+    margin-top: 10px;
+}
+
+// form validator style
+.class-error-form {
+    color: red;
+    margin-left: 15px;
+    font-size: 13px;
+}
+
+.toast-success {
+    text-align: center!important;
+}
+
+.font-size-select {
+    font-size: 14px;
+}
+
+.paragrafo-termos {
+    // color: #8c8b8b;
+    color: #999;
+    margin: 4px;
+    text-align: center;
+    text-decoration: underline;
+    margin-top: -8px;
+}
+
+.margin-button-save {
+    margin-top: 30px;
+}
+
+.my-label {
+    font-size: 13px;
+}
+
+.capitalize-enum {
+    text-transform: capitalize;
+}
+
+.toolbar-md-navbarColor .bar-button-clear-md,
+.toolbar-md-navbarColor .bar-button-default-md,
+.toolbar-md-navbarColor .bar-button-outline-md,
+.toolbar-md-navbarColor .toolbar-title-md {
+    color: #484848;
+}
+
+.margin-icon {
+    margin-right: 7px!important;
+}
+
+.button-search-principal {
+    background-color: #FDB413;
+    margin-left: 10%;
+    box-shadow: none;
+}
+
+.btnDescartCss {
+    color: red!important;
+}
+
+.btnCandidatCss {
+    color: green!important;
+}
+
+.button-search {
+    margin-top: -15px;
+    // margin-left: 25%;
+    background-color: #FDB413;
+    box-shadow: none;
+}
+
+.content .scroll-content {
+    overflow-y: auto !important;
+}
+
+.content-ios .scroll-content {
+    overflow-y: scroll !important;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 0.5px solid #999;
+    // margin: 1em 0;
+    padding: 0;
+}
+
+.corVerde {
+    color: green!important;
+}
+
+.corAzul {
+    color: blue!important;
+}
+
+.corLaranja {
+    color: orange!important;
+}
+
+.corVermelha {
+    color: red!important;
+}
+
+ion-fab {
+    ion-fab-list button[ion-fab] {
+        overflow: visible;
+        div.label {
+            position: absolute;
+            right: 48px;
+            background: rgba(0, 0, 0, 0.7);
+            height: 24px;
+            line-height: 16px;
+            padding-left: 8px;
+            padding-right: 8px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 3px;
+            color: #fff;
+            box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+.custom-image {
+    max-width: 95%!important;
+}
+
+.capitalized {
+    text-transform: capitalize;
+}

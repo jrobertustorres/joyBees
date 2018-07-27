@@ -1,0 +1,63 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <ion-title>{{ 'MEU_ENDERECO' | translate }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+    <form [formGroup]="enderecoUsuarioForm" (ngSubmit)="submeterEnderecoUsuario()">
+
+        <ion-item-divider class="item-divider-style">
+            {{ 'ENDERECO' | translate }}
+            <div item-content>
+                <ion-icon ios="ios-home" md="md-home" item-start></ion-icon>
+            </div>
+        </ion-item-divider>
+
+        <ion-item>
+            <ion-label stacked>{{ 'ENDERECO' | translate }}</ion-label>
+            <ion-textarea formControlName="endereco" [(ngModel)]="enderecoEntity.endereco" rows="3" maxLength="300"></ion-textarea>
+        </ion-item>
+        <div *ngIf="!enderecoUsuarioForm.get('endereco').valid && enderecoUsuarioForm.get('endereco').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="enderecoUsuarioForm.get('endereco').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_300_CARACTERES' | translate }}</div>
+
+        <ion-item>
+            <ion-label stacked>{{ 'LABEL_CEP' | translate }}</ion-label>
+            <ion-input formControlName="cep" [(ngModel)]="enderecoEntity.cep" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <div *ngIf="!enderecoUsuarioForm.get('cep').valid && enderecoUsuarioForm.get('cep').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="enderecoUsuarioForm.get('cep').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_100_CARACTERES' | translate }}</div>
+
+        <ion-item>
+            <ion-label stacked>{{ 'LABEL_NOME_RESID' | translate }}</ion-label>
+            <ion-input formControlName="nomeResidencia" [(ngModel)]="enderecoEntity.nomeResidencia" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
+        </ion-item>
+        <div *ngIf="!enderecoUsuarioForm.get('nomeResidencia').valid && enderecoUsuarioForm.get('nomeResidencia').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        <div *ngIf="enderecoUsuarioForm.get('nomeResidencia').hasError('maxlength')" [ngClass]="'class-error-form'">{{ 'MAX_100_CARACTERES' | translate }}</div>
+
+        <ion-list>
+            <ion-item>
+                <ion-label class="my-label">{{ 'PROVINCIA' | translate }}</ion-label>
+                <ion-select formControlName="idEstado" [(ngModel)]="enderecoEntity.idEstado" (ionChange)="getCidadesByEstadoUsuario(enderecoEntity.idEstado)" cancelText="{{ 'CANCELAR' | translate }}">
+                    <ion-option *ngFor="let estado of estados" value="{{estado.idEstado}}">{{estado.nome}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="!enderecoUsuarioForm.get('idEstado').valid && enderecoUsuarioForm.get('idEstado').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        </ion-list>
+
+        <ion-list>
+            <ion-item style="border-top: 0.55px solid #fff; margin-top: -20px;">
+                <ion-label class="my-label">{{ 'CIDADE' | translate }}</ion-label>
+                <ion-select formControlName="idCidade" [(ngModel)]="enderecoEntity.idCidade" cancelText="{{ 'CANCELAR' | translate }}">
+                    <ion-option *ngFor="let cidade of cidades" value="{{cidade.idCidade}}">{{cidade.cidade}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="!enderecoUsuarioForm.get('idCidade').valid && enderecoUsuarioForm.get('idCidade').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+        </ion-list>
+
+    </form>
+
+</ion-content>

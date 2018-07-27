@@ -1,0 +1,189 @@
+[{
+        "idEstado": "1",
+        "nome": "Aichi"
+    },
+    {
+        "idEstado": "2",
+        "nome": "Akita"
+    },
+    {
+        "idEstado": "3",
+        "nome": "Aomori"
+    },
+    {
+        "idEstado": "4",
+        "nome": "Chiba"
+    },
+    {
+        "idEstado": "5",
+        "nome": "Ehime"
+    },
+    {
+        "idEstado": "6",
+        "nome": "Fukui"
+    },
+    {
+        "idEstado": "7",
+        "nome": "Fukuoka"
+    },
+    {
+        "idEstado": "8",
+        "nome": "Fukushima"
+    },
+    {
+        "idEstado": "9",
+        "nome": "Gifu"
+    },
+    {
+        "idEstado": "10",
+        "nome": "Gunma"
+    },
+    {
+        "idEstado": "11",
+        "nome": "Hiroshima"
+    },
+    {
+        "idEstado": "12",
+        "nome": "Hokkaido"
+    },
+    {
+        "idEstado": "13",
+        "nome": "Hyogo"
+    },
+    {
+        "idEstado": "14",
+        "nome": "Ibaraki"
+    },
+    {
+        "idEstado": "15",
+        "nome": "Ishikawa"
+    },
+    {
+        "idEstado": "16",
+        "nome": "Iwate"
+    },
+    {
+        "idEstado": "17",
+        "nome": "Kagawa"
+    },
+    {
+        "idEstado": "18",
+        "nome": "Kagoshima"
+    },
+    {
+        "idEstado": "19",
+        "nome": "Kanagawa"
+    },
+    {
+        "idEstado": "20",
+        "nome": "Kochi"
+    },
+    {
+        "idEstado": "21",
+        "nome": "Kumamoto"
+    },
+    {
+        "idEstado": "22",
+        "nome": "Kyoto"
+    },
+    {
+        "idEstado": "23",
+        "nome": "Mie"
+    },
+    {
+        "idEstado": "24",
+        "nome": "Miyagi"
+    },
+    {
+        "idEstado": "25",
+        "nome": "Miyazaki"
+    },
+    {
+        "idEstado": "26",
+        "nome": "Nagano"
+    },
+    {
+        "idEstado": "27",
+        "nome": "Nagasaki"
+    },
+    {
+        "idEstado": "28",
+        "nome": "Nara"
+    },
+    {
+        "idEstado": "29",
+        "nome": "Niigata"
+    },
+    {
+        "idEstado": "30",
+        "nome": "Oita"
+    },
+    {
+        "idEstado": "31",
+        "nome": "Okayama"
+    },
+    {
+        "idEstado": "32",
+        "nome": "Okinawa"
+    },
+    {
+        "idEstado": "33",
+        "nome": "Osaka"
+    },
+    {
+        "idEstado": "34",
+        "nome": "Saga"
+    },
+    {
+        "idEstado": "35",
+        "nome": "Saitama"
+    },
+    {
+        "idEstado": "36",
+        "nome": "Shiga"
+    },
+    {
+        "idEstado": "37",
+        "nome": "Shimane"
+    },
+    {
+        "idEstado": "38",
+        "nome": "Shizuoka"
+    },
+    {
+        "idEstado": "39",
+        "nome": "Tochigi"
+    },
+    {
+        "idEstado": "40",
+        "nome": "Tokushima"
+    },
+    {
+        "idEstado": "41",
+        "nome": "Tokyo"
+    },
+    {
+        "idEstado": "42",
+        "nome": "Tottori"
+    },
+    {
+        "idEstado": "43",
+        "nome": "Toyama"
+    },
+    {
+        "idEstado": "44",
+        "nome": "Wakayama"
+    },
+    {
+        "idEstado": "45",
+        "nome": "Yamagata"
+    },
+    {
+        "idEstado": "46",
+        "nome": "Yamaguchi"
+    },
+    {
+        "idEstado": "47",
+        "nome": "Yamanashi"
+    }
+]
