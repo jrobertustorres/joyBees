@@ -88,7 +88,6 @@
             <string>Need location access to find Providers nearby</string>
         </edit-config>
     </platform>
-    <engine name="android" spec="^6.3.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.1" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.12" />
@@ -113,4 +112,5 @@
     <plugin name="cordova-plugin-datepicker" spec="^0.9.3" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
+    <engine name="android" spec="^6.3.0" />
 </widget>
