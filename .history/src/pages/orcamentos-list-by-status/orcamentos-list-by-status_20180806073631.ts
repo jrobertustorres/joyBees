@@ -22,6 +22,7 @@ export class OrcamentosListByStatusPage {
   private orcamentosList: any;
   public loading = null;
   public languageDictionary: any;
+  private refresh: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
@@ -58,23 +59,39 @@ export class OrcamentosListByStatusPage {
     }
   }
 
+  loadMore(infiniteScroll) {
+
+    setTimeout(() => {
+
+      this.findCotacoesListByStatus();
+      infiniteScroll.complete();
+    }, 500);
+  }
+
   findCotacoesListByStatus() {
     try {
-      this.loading = this.loadingCtrl.create({
-        content: this.languageDictionary.LOADING_TEXT
-      });
-      this.loading.present();
+      this.orcamentoEntity.limitDados = this.orcamentoEntity.limitDados ? this.orcamentosList.length : null;
+
+      // if(this.orcamentoEntity.limitDados == null) {
+      if(this.refresh == false) {
+        this.loading = this.loadingCtrl.create({
+          content: this.languageDictionary.LOADING_TEXT
+        });
+        this.loading.present();
+      }
 
       this.orcamentoEntity.statusOrcamentoEnum = this.status;
       this.orcamentoService.findServicoOrcamentoByStatus(this.orcamentoEntity)
       .then((orcamentoServiceResult: OrcamentoEntity) => {
         this.orcamentosList = orcamentoServiceResult;
+        this.orcamentoEntity.limitDados = this.orcamentosList.length;
 
-        console.log(this.orcamentosList);
-
-        this.loading.dismiss();
+        this.refresh = true;
+        this.loading ? this.loading.dismiss() : '';
+        // this.loading.dismiss();
       }, (err) => {
-        this.loading.dismiss();
+        this.loading ? this.loading.dismiss() : '';
+        // this.loading.dismiss();
         this.alertCtrl.create({
           subTitle: err.message,
           buttons: ['OK']
@@ -88,16 +105,16 @@ export class OrcamentosListByStatusPage {
     }
   }
 
-  verificaStatus(idServicoOrcamento, idCotacao) {
+  verificaStatus(idServicoOrcamento) {
     if (this.status =='RESPONDIDO') {
-      this.openCotacoesRespondidasList(idCotacao);
+      this.openCotacoesRespondidasList(idServicoOrcamento);
     } else {
       this.openDetalhaServicoOrcamentoByUsuario(idServicoOrcamento);
     }
   }
 
-  openCotacoesRespondidasList(idCotacao) {
-    this.navCtrl.push(CotacoesRespondidasListPage, {idCotacao: idCotacao});
+  openCotacoesRespondidasList(idServicoOrcamento) {
+    this.navCtrl.push(CotacoesRespondidasListPage, {idServicoOrcamento: idServicoOrcamento});
   }
 
   openDetalhaServicoOrcamentoByUsuario(idServicoOrcamento) {

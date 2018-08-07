@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, ToastController } from 'ionic-angular';
+import { IonicPage, Platform, NavController, NavParams, LoadingController, AlertController, ModalController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { Constants } from '../../app/constants';
 
 //SERVICES
 import { ServicoService } from './../../providers/servico-service';
@@ -16,6 +17,8 @@ import { OrcamentoEntity } from './../../model/orcamento-entity';
 //PAGES
 import { ModalInformacoesPorSevicoPage } from '../modal-informacoes-por-sevico/modal-informacoes-por-sevico';
 import { PrincipalPage } from './../principal/principal';
+import { HomePage } from '../home/home';
+import { ConfiguracoesPage } from '../configuracoes/configuracoes';
 
 @IonicPage()
 @Component({
@@ -34,6 +37,7 @@ export class NovoOrcamentoPage {
   public dadosOrcamento: any[] = [];
   public languageDictionary: any;
   private orcamentoEntity: OrcamentoEntity;
+  public idUsuario: string;
 
   constructor(public navCtrl: NavController, 
               public loadingCtrl: LoadingController,
@@ -45,10 +49,13 @@ export class NovoOrcamentoPage {
               private diagnostic: Diagnostic,
               private locationAccuracy: LocationAccuracy,
               private toastCtrl: ToastController,
+              public platform: Platform,
               private languageTranslateService: LanguageTranslateService,
               public navParams: NavParams) {
     this.servicoListEntity = new ServicoListEntity();
     this.orcamentoEntity = new OrcamentoEntity();
+    this.idUsuario = localStorage.getItem(Constants.ID_USUARIO);
+
   }
 
   ngOnInit() {
@@ -116,8 +123,6 @@ export class NovoOrcamentoPage {
 
           this.listServicoResposta = servicoListEntityResult;
 
-          console.log(this.listaServicos);
-
           this.loading.dismiss();
         }, (err) => {
           this.loading.dismiss();
@@ -160,28 +165,75 @@ export class NovoOrcamentoPage {
       
   }
 
-  servicosChecked(idServico, nomeServico) {
+  servicosChecked(idServico, nomeServico, quantidadeObrigatorio) {
     let index = this.servicosSelecionados.indexOf(idServico);
 
     if (index != -1) {
       this.servicosSelecionados.splice(index, 1);
     } else {
       this.servicosSelecionados.push(idServico);
-      this.openModalMaisInformacoes(idServico, nomeServico);
+      this.openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio);
     }
 
   }
 
   verificaServicosSelecionados() {
-    if(this.servicosSelecionados.length > 0) {
-      this.getGpsPosition(); // COMENTAR AQUI PARA USAR NO CELULAR
-      // this.getGpsStatus(); // DESCOMENTAR AQUI PARA USAR NO CELULAR
-      
+    if(localStorage.getItem(Constants.IS_CADASTRO_COMPLETO_SERVICO)){
+      if(this.servicosSelecionados.length > 0) {
+        if (this.platform.is('cordova')) {
+          this.getGpsStatus();
+        } else {
+          this.getGpsPosition();
+        }
+        
+      } else {
+        this.showAlert();
+      }
     } else {
-      this.showAlert();
+      this.showAlertCadastroCompleto();
     }
 
   }
+
+  showAlertCadastroCompleto() {
+    const confirm = this.alertCtrl.create({
+      title: this.languageDictionary.ENDEREÇO_IMCOPLETO_TEXT,
+      subTitle: this.languageDictionary.MESSAGE_SUBTIBLE_CADASTRO_INCOMPLETO_SERVICO,
+      buttons: [
+        {
+          text: this.languageDictionary.CANCELAR,
+          handler: () => {
+          }
+        },
+        {
+          text: this.languageDictionary.BTN_CONFIG,
+          handler: () => {
+            this.navCtrl.setRoot(ConfiguracoesPage,{}, { animate: true, direction: 'back' });
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  // showAlertCadastroCompleto() {
+  //   let alert = this.alertCtrl.create({
+  //     title: this.languageDictionary.CADASTRO_IMCOPLETO_TEXT,
+  //     subTitle: this.languageDictionary.MESSAGE_SUBTIBLE_CADASTRO_INCOMPLETO_SERVICO,
+  //     buttons: [
+  //       {
+  //         text: this.languageDictionary.CANCELAR,
+  //       },
+  //       {
+  //         text: this.languageDictionary.BTN_CONFIG,
+  //         handler: () => {
+  //           this.navCtrl.setRoot(ConfiguracoesPage);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
   showAlert() {
     let alert = this.alertCtrl.create({
@@ -228,6 +280,7 @@ export class NovoOrcamentoPage {
     this.loading.present();
 
     this.geolocation.getCurrentPosition().then((resp) => {
+      // pegamos as coords para ir lançando pra quem está mais perto - no inicio vamos lançar para todos os fornecedores
       this.lancarOrcamento(resp.coords.latitude, resp.coords.longitude);
      }).catch((error) => {
        console.log('Error getting location', error);
@@ -283,19 +336,20 @@ export class NovoOrcamentoPage {
     prompt.present();
   }
 
-  openModalMaisInformacoes(idServico, nomeServico){
-    let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServico: idServico, nomeServico: nomeServico});
+  openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio){
+    let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServico: idServico, nomeServico: nomeServico, quantidadeObrigatorio: quantidadeObrigatorio});
 
     modal.onDidDismiss((data) => {
       if (data) {
-        console.log(data);
         this.dadosOrcamento.push(data.filter);
-        // let idCidadeFiltro = data.filter.idCidade ? data.filter.idCidade : data.filter.idCidade;
-        // this.openOficinasList(idServico, idCidadeFiltro, this.idVeiculo);
       }
     });
 
     modal.present();
+  }
+
+  goToLogin() {
+    this.navCtrl.push(HomePage,{loginPage: true}, { animate: true, direction: 'back' });
   }
 
 
