@@ -1,0 +1,22 @@
+page-configuracoes {
+    // .bandeiras-style {
+    //     width: 25px!important;
+    //     height: auto!important;
+    //     margin-left: 85%!important;
+    //     margin-top: -15px!important;
+    // }
+    .font-size-select {
+        font-size: 14px;
+    }
+    .alert-checkbox-label {
+        overflow: hidden;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        text-overflow: normal;
+        color: initial;
+        padding: 13px 26px;
+        white-space: normal!important;
+    }
+}

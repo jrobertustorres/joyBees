@@ -1,0 +1,107 @@
+page-home {
+    .logo-style {
+        // display: block;
+        // width: 80%;
+        // height: auto;
+        // margin-left: auto;
+        // margin-right: auto;
+        // margin-bottom: -10px;
+        // padding: 10px;
+        display: block;
+        width: 260px;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: -10px;
+        padding: 20px;
+    }
+    .span-style {
+        font-size: 13px;
+        position: fixed;
+    }
+    .style-right-icon-facebook {
+        margin-right: 100%;
+    }
+    .style-right-icon {
+        margin-right: 100%;
+        color: #484848;
+    }
+    .text-under-logo {
+        margin-bottom: -10px;
+        text-align: center;
+    }
+    .font-style-home {
+        font-family: 'Open Sans';
+        // font-size: 36px;
+        // text-shadow: 2px 2px 9px #fff;
+        color: #FDB313;
+    }
+    .card-background-page {
+        ion-card {
+            position: relative;
+            text-align: center;
+        }
+        .card-title {
+            // position: absolute;
+            // top: 37%;
+            // font-size: 1.6em;
+            // width: 100%;
+            // font-weight: bold;
+            // color: #fff;
+            position: absolute;
+            top: 30%;
+            font-size: 2.0em;
+            width: 100%;
+            font-weight: bold;
+            color: #fff;
+        }
+        .card-subtitle {
+            font-size: 1.0em;
+            position: absolute;
+            top: 53%;
+            width: 100%;
+            color: #fff;
+        }
+        .icon-style {
+            // margin-top: 30px;
+            // margin-right: 30px;
+            // color: #FDB313;
+            // float: right;
+            // position: relative;
+            // font-size: 80px;
+            // z-index: 2;
+            margin-top: 50px;
+            margin-right: 30px;
+            color: #FDB313;
+            float: right;
+            position: relative;
+            font-size: 40px;
+            z-index: 2;
+        }
+        .span-style-home {
+            // float: left;
+            margin-top: -3%;
+            // font-size: 20px;
+            // z-index: 2;
+            // position: relative;
+            float: left;
+            font-size: 20px;
+            z-index: 2;
+            position: relative;
+        }
+    }
+    .div-header-home {
+        position: fixed;
+        width: 100%;
+    }
+    .div-style-logo {
+        margin-top: 40px;
+    }
+    .hive-img-style {
+        height: 130px;
+        width: 100%;
+        position: absolute;
+        opacity: 0.4;
+        z-index: 1;
+    }
+}

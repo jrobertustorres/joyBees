@@ -1,0 +1,140 @@
+<ion-header>
+    <!-- <ion-grid style="position: fixed;height: 34%;" class="content-stable">
+        <ion-row style="margin-top: 30px;">
+            <ion-col>
+                <img src="assets/imgs/logo.png" class="logo-style">
+                <div padding class="text-under-logo">
+                    <p>{{ 'REGISTER_TEXT' | translate }}</p>
+                </div>
+
+
+            </ion-col>
+        </ion-row>
+    </ion-grid> -->
+    <div class="content-stable div-header-home">
+        <div style="margin-top: 30px;">
+            <div class="div-style-logo">
+                <img src="assets/imgs/logo.png" class="logo-style">
+                <div padding class="text-under-logo">
+                    <p>{{ 'REGISTER_TEXT' | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-header>
+
+<!-- <ion-content style="margin-top: -65px;"> -->
+<!-- <ion-content> -->
+<ion-content class="card-background-page">
+    <div style="margin-top: 220px;" class="fixed-content">
+        <!-- <div> -->
+
+        <div padding>
+            <ion-segment [(ngModel)]="segment" style="background-color: #fff;">
+                <ion-segment-button value="vagasDestaque" style="font-size: 12px;">
+                    {{ 'BTN_OQUEPROCURO' | translate }}
+                </ion-segment-button>
+                <ion-segment-button value="login">
+                    LOGIN
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+
+        <div [ngSwitch]="segment">
+            <ion-list *ngSwitchCase="'vagasDestaque'">
+
+                <ion-card style="height: 130px; background-color: #484848;" (click)="goVagasEmDestaque()">
+                    <img src="assets/imgs/hive2.png" class="hive-img-style" />
+                    <ion-icon ios="ios-people" md="ios-people" class="icon-style"></ion-icon>
+                    <div class="card-title" padding>
+                        <span class="span-style-home">
+                            <b class="font-style-home">{{ 'VAGAS_UPPER_CASE' | translate }}<br> {{ 'VAGAS_EMPREGO_HOME' | translate }}</b>
+                        </span>
+                    </div>
+                </ion-card>
+                <ion-card style="height: 130px; background-color: #484848;" (click)="goFornecedoresEmDestaque()">
+                    <img src="assets/imgs/hive2.png" class="hive-img-style" />
+                    <ion-icon ios="ios-contacts" md="ios-contacts" class="icon-style"></ion-icon>
+                    <div class="card-title" padding>
+                        <span class="span-style-home">
+                                <b class="font-style-home">{{ 'PRESTADORES' | translate }}<br> {{ 'SERVICOS' | translate }}</b>
+                            </span>
+                    </div>
+                </ion-card>
+
+                <!-- <ion-card style="height: 130px; background-color: #484848;" (click)="goVagasEmDestaque()">
+                    <img src="assets/imgs/hive2.png" style="height: 130px; width: 100%; position: absolute; opacity: 0.4; z-index: 1;" />
+                    <ion-icon ios="ios-people" md="ios-people" class="icon-style"></ion-icon>
+
+                    <div class="card-title" padding>
+                        <span style="float: left; margin-top: -8%; font-size: 20px; z-index: 2; position: relative;">
+                            <b class="font-style-home">{{ 'VAGAS_UPPER_CASE' | translate }}<br> {{ 'VAGAS_EMPREGO_HOME' | translate }}</b>
+                        </span>
+                    </div>
+                </ion-card> -->
+
+                <!-- <ion-card style="height: 130px; background-color: #484848;" (click)="goFornecedoresEmDestaque()">
+                    <img src="assets/imgs/hive2.png" style="height: 130px; width: 100%; position: absolute; opacity: 0.4;" />
+                    <ion-icon ios="ios-contacts" md="ios-contacts" class="icon-style"></ion-icon>
+
+                    <div class="card-title" padding><span style="float: left; margin-top: -8%;
+                        font-size: 20px; z-index: 2; position: relative;"><b class="font-style-home">{{ 'PRESTADORES' | translate }}<br> {{ 'SERVICOS' | translate }}</b></span></div>
+                </ion-card> -->
+
+                <ion-card *ngFor="let vaga of vagas">
+                    <ion-card-header text-wrap>
+                        <strong>{{vaga.nome}}</strong>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <p>{{vaga.descricao}}</p>
+                        <p>{{vaga.cidadeEstadoFormat}}</p>
+                        <p style="color: #999">
+                            <ion-icon ios="ios-calendar" md="md-calendar"></ion-icon> {{vaga.tempoAberto}}
+                        </p>
+                    </ion-card-content>
+                    <ion-row class="border-top-color">
+                        <ion-col>
+                        </ion-col>
+                        <ion-col>
+                            <button ion-button clear item-end icon-left (click)="candidatarVaga(vaga.idVaga)">
+                                <ion-icon ios="ios-thumbs-up" md="md-thumbs-up"></ion-icon>
+                                <strong><h3 style="color: #488AFF;">{{ 'BTN_CANDIDATAR_VAGA' | translate }}</h3></strong>
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-card>
+
+            </ion-list>
+
+            <ion-list *ngSwitchCase="'login'">
+                <ion-card>
+                    <ion-card-header style="font-size: 13px; font-weight: 500;">
+                        {{ 'ENTRE_SUA_CONTA' | translate}}
+                    </ion-card-header>
+                    <ion-card-content>
+                        <button ion-button icon-left block style="background-color: #1A237E" (click)="doFbLogin()">
+                            <ion-icon ios="logo-facebook" md="logo-facebook" class="style-right-icon-facebook"></ion-icon>
+                            <span class="span-style">{{ 'FACEBOOK_LOGIN' | translate }}</span>
+                        </button>
+                        <button ion-button icon-left block color="button-login" style="margin-top: 15px;" (click)="goLogin()">
+                            <ion-icon ios="ios-mail" md="md-mail" class="style-right-icon"></ion-icon>
+                            <span class="span-style span-style-color" style="font-size: 12px;">{{ 'ENTRAR_EMAIL_SENHA' | translate }}</span>
+                        </button>
+                    </ion-card-content>
+                </ion-card>
+
+                <div padding>
+                    <p>
+                        <span style="font-size: 13px; font-weight: 500;">
+                                {{ 'SEM_CONTA' | translate }} <span style="float: right;"><strong style="color: #1E7F41;" (click)="goMeusDados()">{{ 'BTN_INSCREVER' | translate }}</strong></span>
+                        </span>
+                    </p>
+                </div>
+
+                <p class="paragrafo-termos" (click)="openModalTermos()">{{ 'ACEITO_TERMOS' | translate }}</p>
+            </ion-list>
+        </div>
+
+    </div>
+
+</ion-content>
