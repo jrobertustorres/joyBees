@@ -100,12 +100,12 @@ export class VagaService {
     }
   }
 
-  public findVagaCandidatarByVagaUsuarioFilter(nomeVaga) {
+  public findVagaCandidatarByVagaUsuario(vagaListaEntity) {
     try {
 
       return new Promise((resolve, reject) => {
-        this.http.post(Constants.API_URL + 'findVagaCandidatarByVagaUsuarioFilter/'
-          + localStorage.getItem(Constants.TOKEN_USUARIO), JSON.stringify(nomeVaga), this.options)
+        this.http.post(Constants.API_URL + 'findVagaCandidatarByVagaUsuario/'
+          + localStorage.getItem(Constants.TOKEN_USUARIO), JSON.stringify(vagaListaEntity), this.options)
           .map(res=>res.json())
           .subscribe(data => {
             resolve(data);

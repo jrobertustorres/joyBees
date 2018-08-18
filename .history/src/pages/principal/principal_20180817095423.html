@@ -11,8 +11,8 @@
 
 <ion-content class="content-stable card-background-page">
 
-    <div id='conteudo' class="div-style-publicidade">
-        <ion-slides pager *ngIf="propagandas && propagandas.length" (ionSlideDidChange)="slideChanged()" autoplay="5000" loop="true" speed="3000">
+    <div id='conteudo' style="min-width: 325px; min-height: 180px;">
+        <ion-slides pager *ngIf="propagandas && propagandas.length" (ionSlideDidChange)="slideChanged()" autoplay="5000" loop="true" speed="1000">
             <ion-slide *ngFor="let propaganda of propagandas">
                 <!-- <ion-slide *ngFor="let propaganda of propagandas" (click)="openModalMaisInformacoesPrincipal(propaganda.idServicoFornecedor, true, propaganda.nomeServico);"> -->
                 <!-- <img src="assets/imgs/logiic.gif" class="image-style"> -->

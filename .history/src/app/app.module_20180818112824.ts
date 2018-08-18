@@ -15,6 +15,8 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { DatePicker } from '@ionic-native/date-picker';
 import { Ionic2RatingModule } from 'ionic2-rating';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { MaskMoneyUtil } from '../utilitarios/maskMoney';
 
 import { Storage } from '@ionic/storage';
 
@@ -60,6 +62,7 @@ import { CotacoesRespondidasListPage } from '../pages/cotacoes-respondidas-list/
 import { DetalhaServicoOrcamentoByUsuarioPage } from '../pages/detalha-servico-orcamento-by-usuario/detalha-servico-orcamento-by-usuario';
 import { ModalImagemFornecedorPage } from '../pages/modal-imagem-fornecedor/modal-imagem-fornecedor';
 import { ModalAvaliacaoServicoFornecedorPage } from './../pages/modal-avaliacao-servico-fornecedor/modal-avaliacao-servico-fornecedor';
+import { MeuEnderecoPage } from '../pages/meu-endereco/meu-endereco';
 
 //ENTITYS
 import { UsuarioDetalheEntity } from '../model/usuario-detalhe-entity';
@@ -82,6 +85,9 @@ import { ImagemServicoFornecedorEntity } from '../model/imagem-servico-fornecedo
 import { CotacaoOrcamentoUsuarioEntity } from '../model/cotacao-orcamento-usuario-entity';
 import { PublicidadePropagandaEntity } from '../model/publicidade-propaganda-entity';
 import { RamoEmpresaEntity } from '../model/ramo-empresa-entity'; 
+import { VersaoAppEntity } from '../model/versao-app-entity';
+import { EnderecoEntity } from '../model/endereco-entity';
+import { UsuarioRamoEmpresaEntity } from '../model/usuario-ramo-empresa-entity';
 
 //SERVICES
 import { EstadosService } from '../providers/estados-service';
@@ -96,6 +102,7 @@ import { OrcamentoService } from '../providers/orcamento-service';
 import { FornecedorService } from '../providers/fornecedor-service';
 import { PublicidadePropagandaService } from '../providers/publicidade-propaganda-service';
 import { RamoEmpresaService } from '../providers/ramo-empresa-service';
+import { VersaoAppService } from '../providers/versao-app-service';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -137,7 +144,8 @@ function provideStorage() {
     CotacoesRespondidasListPage,
     DetalhaServicoOrcamentoByUsuarioPage,
     ModalImagemFornecedorPage,
-    ModalAvaliacaoServicoFornecedorPage
+    ModalAvaliacaoServicoFornecedorPage,
+    MeuEnderecoPage
   ],
   imports: [
     HttpModule,
@@ -185,7 +193,8 @@ function provideStorage() {
     CotacoesRespondidasListPage,
     DetalhaServicoOrcamentoByUsuarioPage,
     ModalImagemFornecedorPage,
-    ModalAvaliacaoServicoFornecedorPage
+    ModalAvaliacaoServicoFornecedorPage,
+    MeuEnderecoPage
   ],
   providers: [
     StatusBar,
@@ -209,6 +218,7 @@ function provideStorage() {
     FornecedorService,
     PublicidadePropagandaService,
     RamoEmpresaService,
+    VersaoAppService,
     UsuarioDetalheEntity,
     CidadeEntity,
     Network,
@@ -232,11 +242,16 @@ function provideStorage() {
     CotacaoOrcamentoUsuarioEntity,
     PublicidadePropagandaEntity,
     RamoEmpresaEntity,
+    VersaoAppEntity,
+    EnderecoEntity,
+    UsuarioRamoEmpresaEntity,
     Push,
     Geolocation,
     Diagnostic,
     LocationAccuracy,
     DatePicker,
+    InAppBrowser,
+    MaskMoneyUtil,
     {provide: Storage, useFactory: provideStorage}
   ]
 })

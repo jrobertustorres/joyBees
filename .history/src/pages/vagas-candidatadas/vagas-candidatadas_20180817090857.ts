@@ -24,7 +24,6 @@ export class VagasCandidatadasPage {
   private vagaListaEntity: VagaListaEntity;
   private vagas;
   private refresh: boolean = false;
-  private nomeVaga: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -65,11 +64,7 @@ export class VagasCandidatadasPage {
 
     setTimeout(() => {
 
-      if(this.nomeVaga == '' || this.nomeVaga == undefined) {
-        this.getVagasCandidatadas();
-      } else {
-        this.filtrarPorNomeVaga(this.nomeVaga);
-      }
+      this.getVagasCandidatadas();
       infiniteScroll.complete();
     }, 500);
   }
@@ -88,7 +83,7 @@ export class VagasCandidatadasPage {
 
   getVagasCandidatadas() {
     try {
-      this.nomeVaga = '';
+      this.vagaListaEntity.nome = '';
       this.vagaListaEntity.limiteDados = this.vagaListaEntity.limiteDados ? this.vagas.length : null;
 
       if(this.refresh == false) {
@@ -101,6 +96,7 @@ export class VagasCandidatadasPage {
       this.vagaService.findVagasCandidatadas()
         .then((vagasListaEntityResult: VagaListaEntity) => {
           this.vagas = vagasListaEntityResult;
+          // this.vagas.limiteDados = this.vagas.length;
           this.vagaListaEntity.limiteDados = this.vagas.length;
 
           this.refresh = true;
@@ -130,12 +126,11 @@ export class VagasCandidatadasPage {
       });
       this.loading.present();
 
-      console.log(filtro.srcElement.value);
-
-      this.nomeVaga = filtro.srcElement.value;
-      this.vagaService.findVagaCandidatarByVagaUsuarioFilter(this.nomeVaga)
+      this.vagaListaEntity.nome = filtro.srcElement.value;
+      this.vagaService.findVagaCandidatarByVagaUsuario(this.vagaListaEntity)
         .then((vagasListaEntityResult: VagaListaEntity) => {
           this.vagas = vagasListaEntityResult;
+          // this.vagas.limiteDados = this.vagas.length;
           this.vagaListaEntity.limiteDados = this.vagas.length;
 
           this.loading.dismiss();

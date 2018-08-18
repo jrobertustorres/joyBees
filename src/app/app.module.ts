@@ -8,7 +8,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { Device } from '@ionic-native/device';
 import { Network } from '@ionic-native/network';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-// import { Facebook } from '@ionic-native/facebook';
+import { Facebook } from '@ionic-native/facebook';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -225,7 +225,7 @@ function provideStorage() {
     Camera,
     VagaListaEntity,
     VagaDetalheEntity,
-    // Facebook,
+    Facebook,
     ServicoEntity,
     ServicoListEntity,
     TipoServicoEntity,

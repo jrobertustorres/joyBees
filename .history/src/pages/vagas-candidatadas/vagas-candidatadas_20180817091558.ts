@@ -65,10 +65,10 @@ export class VagasCandidatadasPage {
 
     setTimeout(() => {
 
-      if(this.nomeVaga == '' || this.nomeVaga == undefined) {
+      if(this.vagaListaEntity.nome == '' || this.vagaListaEntity.nome == undefined) {
         this.getVagasCandidatadas();
       } else {
-        this.filtrarPorNomeVaga(this.nomeVaga);
+        this.filtrarPorNomeVaga(this.vagaListaEntity.nome);
       }
       infiniteScroll.complete();
     }, 500);
@@ -88,7 +88,7 @@ export class VagasCandidatadasPage {
 
   getVagasCandidatadas() {
     try {
-      this.nomeVaga = '';
+      this.vagaListaEntity.nome = '';
       this.vagaListaEntity.limiteDados = this.vagaListaEntity.limiteDados ? this.vagas.length : null;
 
       if(this.refresh == false) {
@@ -101,6 +101,7 @@ export class VagasCandidatadasPage {
       this.vagaService.findVagasCandidatadas()
         .then((vagasListaEntityResult: VagaListaEntity) => {
           this.vagas = vagasListaEntityResult;
+          // this.vagas.limiteDados = this.vagas.length;
           this.vagaListaEntity.limiteDados = this.vagas.length;
 
           this.refresh = true;
@@ -136,6 +137,7 @@ export class VagasCandidatadasPage {
       this.vagaService.findVagaCandidatarByVagaUsuarioFilter(this.nomeVaga)
         .then((vagasListaEntityResult: VagaListaEntity) => {
           this.vagas = vagasListaEntityResult;
+          // this.vagas.limiteDados = this.vagas.length;
           this.vagaListaEntity.limiteDados = this.vagas.length;
 
           this.loading.dismiss();

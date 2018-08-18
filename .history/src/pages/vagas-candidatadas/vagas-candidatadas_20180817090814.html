@@ -7,7 +7,7 @@
         <ion-title>
             <span>{{ 'VAGA_CANDIDATADAS' | translate }}</span>
         </ion-title>
-        <ion-buttons end>
+        <ion-buttons end *ngIf="vagas?.length > 0">
             <button ion-button icon-only (click)="showFilter = !showFilter">
                 <ion-icon ios="ios-search" md="md-search"></ion-icon>
             </button>

@@ -208,6 +208,7 @@ export class PrincipalPage {
 
     this.geolocation.getCurrentPosition().then((resp) => {
       this.findPublicidadePropaganda(resp.coords.latitude, resp.coords.longitude);
+      // this.lancarOrcamento(resp.coords.latitude, resp.coords.longitude);
      }).catch((error) => {
        console.log('Error getting location', error);
         this.loading.dismiss();

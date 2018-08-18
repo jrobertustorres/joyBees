@@ -65,10 +65,10 @@ export class VagasCandidatadasPage {
 
     setTimeout(() => {
 
-      if(this.nomeVaga == '' || this.nomeVaga == undefined) {
+      if(this.vagaListaEntity.nome == '' || this.vagaListaEntity.nome == undefined) {
         this.getVagasCandidatadas();
       } else {
-        this.filtrarPorNomeVaga(this.nomeVaga);
+        this.filtrarPorNomeVaga(this.vagaListaEntity.nome);
       }
       infiniteScroll.complete();
     }, 500);

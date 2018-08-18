@@ -16,7 +16,7 @@ export class UsuarioEntity {
   public statusAceitoTermoUso: boolean;
   public status: boolean;
   public versaoApp: string;
-  public genero: string;
+  public generoEnum: string;
   
   public isCadastroCompletoVaga: boolean;
   public isCadastroCompletoServico: boolean;

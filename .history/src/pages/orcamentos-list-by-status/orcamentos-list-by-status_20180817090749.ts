@@ -136,6 +136,7 @@ export class OrcamentosListByStatusPage {
       .then((orcamentoServiceResult: OrcamentoEntity) => {
         this.orcamentosList = orcamentoServiceResult;
         this.orcamentoEntity.limitDados = this.orcamentosList.length;
+        // this.orcamentoEntity.nomeServico = '';
 
         this.loading.dismiss();
       }, (err) => {

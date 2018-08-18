@@ -117,4 +117,9 @@
     </plugin>
     <engine name="android" spec="^6.3.0" />
     <engine name="ios" spec="^4.5.5" />
+    <plugin name="cordova-plugin-facebook4" spec="^2.3.0">
+        <variable name="APP_ID" value="210518629503681" />
+        <variable name="APP_NAME" value="joyBees" />
+        <variable name="ANDROID_SDK_VERSION" value="4.+" />
+    </plugin>
 </widget>

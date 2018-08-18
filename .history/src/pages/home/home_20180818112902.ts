@@ -120,33 +120,6 @@ export class HomePage {
     modal.present();
   }
 
-  //método para chamar api do facebook e salvar no banco o usuario    
-  // loginFacebook() {
-  //   let permissions = new Array<string>();
-  //   permissions = ["public_profile", "email"];
-
-  //   this.facebook.login(permissions).then((response) => {
-  //   let params = new Array<string>();
-
-  //   this.facebook.api("/me?fields=name,email", params)
-  //   .then(res => {
-
-  //     this.usuarioEntity.idUsuarioFacebook = res.id;
-  //     this.usuarioEntity.nomePessoa = res.name;
-  //     this.usuarioEntity.genero = res.gender;
-  //     this.usuarioEntity.imagemPessoaBs64 = res.picture;
-  //     this.usuarioEntity.login = res.email;
-
-  //     this.callLoginFacebook(this.usuarioEntity);
-  //   }, (error) => {
-  //     alert(error);
-  //     console.log('ERRO LOGIN: ',error);
-  //   })
-  //   }, (error) => {
-  //     alert(error);
-  //   });
-  // }
-
   // doFbLogin(){
   //   let permissions = new Array<string>();
   //   // let nav = this.navCtrl;

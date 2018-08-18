@@ -1,32 +1,34 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, PopoverController, ModalController, Slides } from 'ionic-angular';
+import { IonicPage, Platform, NavController, NavParams, LoadingController, AlertController, PopoverController, ModalController, Slides, ToastController } from 'ionic-angular';
 import { Constants } from '../../app/constants';
-import {DomSanitizer} from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { InAppBrowser, InAppBrowserOptions } from "@ionic-native/in-app-browser";
 
 //PROVIDERS
 import { LanguageProvider } from '../../providers/language-provider';
 
 //I18N
 import { TranslateService } from '@ngx-translate/core';
-// import { availableLanguages, sysOptions } from '../i18n/i18n-constants';
 
 //SERVICES
-// import { VagaService } from '../../providers/vaga-service';
 import { LanguageTranslateService } from '../../providers/language-translate-service';
 import { PublicidadePropagandaService } from '../../providers/publicidade-propaganda-service';
+import { OrcamentoService } from './../../providers/orcamento-service';
+import { VersaoAppService } from '../../providers/versao-app-service';
 
 //ENTITYS
-// import { VagaListaEntity } from '../../model/vaga-lista-entity';
-// import { VagaDetalheEntity } from '../../model/vaga-detalhe-entity';
 import { PublicidadePropagandaEntity } from '../../model/publicidade-propaganda-entity';
+import { OrcamentoEntity } from './../../model/orcamento-entity';
+import { ServicoOrcamentoEntity } from '../../model/servico-orcamento-entity';
+import { VersaoAppEntity } from '../../model/versao-app-entity';
 
 //PAGES
 import { VagasEmDestaquePage } from './../vagas-em-destaque/vagas-em-destaque';
-// import { FornecedoresEmDestaquePage } from '../fornecedores-em-destaque/fornecedores-em-destaque';
 import { NovoOrcamentoPage } from '../novo-orcamento/novo-orcamento';
+import { ModalInformacoesPorSevicoPage } from '../modal-informacoes-por-sevico/modal-informacoes-por-sevico';
 
 @IonicPage()
 @Component({
@@ -36,25 +38,22 @@ import { NovoOrcamentoPage } from '../novo-orcamento/novo-orcamento';
 export class PrincipalPage {
   @ViewChild(Slides) slides: Slides;
   public languageDictionary: any;
+  private orcamentoEntity: OrcamentoEntity;
+  private servicoOrcamentoEntity: ServicoOrcamentoEntity;
+  private versaoAppEntity: VersaoAppEntity;
+  private versao: any;
   // segment: string = "vagasDestaque"; // default button
 
-  // languages = availableLanguages;
-  // private selectedLanguage = null;
   private translate: TranslateService;
-  // private _idioma: string;
-
-  // private vagasDestaque;
-  // private vagas;
-  // private loadingText: string;
   private loading = null;
   private propagandas: any;
-  // private loadingDestaques = null;
   private publicidadePropagandaEntity: PublicidadePropagandaEntity;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               translate: TranslateService,
-              // private vagaService: VagaService,
+              private versaoAppService: VersaoAppService,
+              private inAppBrowser: InAppBrowser,
               private languageProvider: LanguageProvider,
               public alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
@@ -64,12 +63,17 @@ export class PrincipalPage {
               private diagnostic: Diagnostic,
               private locationAccuracy: LocationAccuracy,
               private languageTranslateService: LanguageTranslateService,
+              public platform: Platform,
+              private toastCtrl: ToastController,
+              private orcamentoService: OrcamentoService,
               private publicidadePropagandaService: PublicidadePropagandaService,
               public popoverCtrl: PopoverController) {
 
     this.translate = translate;
     this.translate.use(localStorage.getItem(Constants.IDIOMA_USUARIO));
     this.publicidadePropagandaEntity = new PublicidadePropagandaEntity();
+    this.orcamentoEntity = new OrcamentoEntity();
+    this.versaoAppEntity = new VersaoAppEntity();
     
   }
 
@@ -78,14 +82,13 @@ export class PrincipalPage {
     this.languageProvider.languageChangeEvent.subscribe(selectedLanguage => {
       this.getTraducaoEmited(); // aqui temos a chamar novamente para funcionar a alteração da linguagem no menu
     });
-    // this.findPublicidadePropaganda(); //  A PUBLICIDADE TAMBÉM DEVE OBEDECER O IDIOMA DO USUÁRIO
   }
 
   ionViewDidLoad() {
   }
 
-  // ionViewDidEnter() {
-  // }
+  ionViewDidEnter() {
+  }
 
   getTraducao() {
     try {
@@ -94,18 +97,11 @@ export class PrincipalPage {
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
-
-        this.getGpsPosition(); // COMENTAR AQUI PARA USAR NO CELULAR
-      // this.getGpsStatus(); // DESCOMENTAR AQUI PARA USAR NO CELULAR
-
-      // ERA ASSIM ANTES
-      // this.findPublicidadePropaganda();
-
+        this.getAtualizacaoStatus();
       });
     }
     catch (err){
       if(err instanceof RangeError){
-        // console.log('out of range');
       }
       console.log(err);
     }
@@ -118,7 +114,6 @@ export class PrincipalPage {
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
-        // this.constroiMenu();
 
       });
     }
@@ -130,16 +125,27 @@ export class PrincipalPage {
     }
   }
 
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: this.languageDictionary.MESSAGE_PEDIDO_LANCADO,
+      duration: 3000,
+      position: 'bottom',
+      cssClass: "toast-success"
+    });
+
+    toast.onDidDismiss(() => {
+    });
+
+    toast.present();
+  }
+
   slideChanged() {
-    let currentIndex = this.slides.getActiveIndex();
+    // let currentIndex = this.slides.getActiveIndex();
+    this.slides.autoplayDisableOnInteraction = false;
   }
 
   findPublicidadePropaganda(latitudePes, longitudePes) {
     try {
-      // this.loading = this.loadingCtrl.create({
-      //   content: this.languageDictionary.LOADING_TEXT
-      // });
-      // this.loading.present();
 
       this.publicidadePropagandaEntity.latitudePes = latitudePes;
       this.publicidadePropagandaEntity.longitudePes = longitudePes;
@@ -149,8 +155,6 @@ export class PrincipalPage {
       this.publicidadePropagandaService.findPublicidadePropaganda(this.publicidadePropagandaEntity)
       .then((propagandasResult: PublicidadePropagandaEntity) => {
         this.propagandas = propagandasResult;
-
-        console.log(this.propagandas);
 
         this.loading.dismiss();
       }, (err) => {
@@ -198,18 +202,18 @@ export class PrincipalPage {
   }
 
   getGpsPosition() {
-    this.loading = this.loadingCtrl.create({
-      content: this.languageDictionary.LOADING_TEXT
-    });
-    this.loading.present();
+    // this.loading = this.loadingCtrl.create({
+    //   content: this.languageDictionary.LOADING_TEXT
+    // });
+    // this.loading.present();
 
     this.geolocation.getCurrentPosition().then((resp) => {
       this.findPublicidadePropaganda(resp.coords.latitude, resp.coords.longitude);
       // this.lancarOrcamento(resp.coords.latitude, resp.coords.longitude);
      }).catch((error) => {
        console.log('Error getting location', error);
+        this.loading.dismiss();
      });
-    //  this.loading.dismiss();
   }
 
   showLocationText() {
@@ -235,91 +239,109 @@ export class PrincipalPage {
     this.navCtrl.push(NovoOrcamentoPage);
   }
 
-  // doRefreshDestaques(refresher) {
-  //   this.getVagasDestaquePrincipal();
+  getAtualizacaoStatus() {
+    try {
+      this.loading = this.loadingCtrl.create({
+        content: this.languageDictionary.LOADING_TEXT,
+      });
+      this.loading.present();
 
-  //   setTimeout(() => {
-  //     refresher.complete();
-  //   }, 2000);
-  // }
+      this.versaoAppEntity.versao = localStorage.getItem(Constants.VERSION_NUMBER);
 
-  // doRefreshVagasCidade(refresher) {
-  //   this.vagaDetalheEntity = new VagaDetalheEntity();
-  //   this.getVagasPrincipal(this.vagaDetalheEntity);
+      this.versaoAppService.versaoApp(this.versaoAppEntity)
+      .then((versaoResult: VersaoAppEntity) => {
+        this.versao = versaoResult;
 
-  //   setTimeout(() => {
-  //     refresher.complete();
-  //   }, 2000);
-  // }
+        if(this.versao.descontinuado == true) { //voltar para true
+          this.loading.dismiss();
+          this.showAlertVersao(this.versao);
+        } else {
+          if (this.platform.is('cordova')) {
+            this.getGpsStatus();
+          } else {
+            this.getGpsPosition();
+          }
+        }
 
-  // selectedTabChanged($event): void {
-  //   if ($event._value == "vagasCidade") {
-  //     this.getVagasPrincipal(this.vagaDetalheEntity);
-  //   } 
-  //   else {
-  //   if ($event._value == "vagasDestaque") {
-  //     this.getVagasDestaquePrincipal();
-  //   } else {
-  //     this.getVagasPrincipal(this.vagaDetalheEntity);
-  //   }
-  // }
+        // this.loading.dismiss();
+      }, (err) => {
+        this.loading.dismiss();
+        this.alertCtrl.create({
+          subTitle: err.message,
+          buttons: ['OK']
+        }).present();
+      });
 
-  // openModalFiltro(){
-  //   let modal = this.modalCtrl.create(ModalFiltroPage);
+    }catch (err){
+      if(err instanceof RangeError){
+      }
+      console.log(err);
+    }
+  }
+
+  showAlertVersao(versao) {
+    const alert = this.alertCtrl.create({
+      title: this.languageDictionary.TITLE_ATUALIZACAO_APP,
+      subTitle: this.languageDictionary.SUBTITLE_ATUALIZACAO_APP,
+      buttons: [
+        {
+        text: 'OK',
+          handler: () => {
+            this.getPlatform(versao);
+          }
+      }]
+    });
+    alert.present();
+  }
+
+  getPlatform(versao) {
+    if (this.platform.is('ios')) {
+      this.inAppBrowser.create(versao.linkIos, '_system', 'location=yes');
+      // const browser = this.inAppBrowser.create(url, '_self', options);
+      this.platform.exitApp();
+    }
+
+    if (this.platform.is('android')) {
+      // This will only print when on iOS
+      console.log('I am an android device!');
+      this.inAppBrowser.create(versao.linkAndroid, '_system', 'location=yes');
+      // const browser = this.inAppBrowser.create(url, '_self', options);
+      // window.open(href, '_system', 'location=yes');
+      this.platform.exitApp();
+    }
+    
+  }
+
+  // ESSA PARTE FICARÁ PARA DEPOIS
+  // openModalMaisInformacoesPrincipal(idServicoFornecedor, quantidadeObrigatorio, nomeServico){
+  //   let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServicoFornecedor: idServicoFornecedor, 
+  //     quantidadeObrigatorio: quantidadeObrigatorio, nomeServico: nomeServico});
 
   //   modal.onDidDismiss((data) => {
   //     if (data) {
-  //       this.segment = "vagasCidade";
-  //       this.getVagasPrincipal(data.filter);
+  //       this.lancarPedidoDireto(data.filter);
   //     }
   //   });
 
   //   modal.present();
   // }
 
-  // getVagasDestaquePrincipal() {
+  // lancarPedidoDireto(filtro) {
+
   //   try {
-  //     this.loadingDestaques = this.loadingCtrl.create({
-  //       content: this.loadingText
-  //     });
-  //     this.loadingDestaques.present();
-
-  //     this.vagaService.getVagasHome()
-  //       .then((vagasListaEntityResult: VagaListaEntity) => {
-  //         this.vagasDestaque = vagasListaEntityResult;
-  //         this.loadingDestaques.dismiss();
-  //     }, (err) => {
-  //       this.loadingDestaques.dismiss();
-  //       this.alertCtrl.create({
-  //         subTitle: err.message,
-  //         buttons: ['OK']
-  //       }).present();
-  //     });
-  //   }
-  //   catch (err){
-  //     if(err instanceof RangeError){
-  //       console.log('out of range');
-  //     }
-  //     console.log(err);
-  //   }
-  // }
-
-  // getVagasPrincipal(filtro) {
-  //   try {
-
   //     this.loading = this.loadingCtrl.create({
-  //       content: this.loadingText
+  //       content: this.languageDictionary.LOADING_TEXT
   //     });
   //     this.loading.present();
 
-  //     this.vagaDetalheEntity = new VagaDetalheEntity();
-  //     this.vagaDetalheEntity = filtro;
+  //     this.servicoOrcamentoEntity = new ServicoOrcamentoEntity();
+  //     this.orcamentoEntity.servicoOrcamentoEntity = filtro;
 
-  //     this.vagaService.getVagasPrincipal(this.vagaDetalheEntity)
-  //       .then((vagasListaEntityResult: VagaListaEntity) => {
-  //         this.vagas = vagasListaEntityResult;
-
-  //         this.loading.dismiss();
+  //     this.orcamentoService
+  //     .lancarOrcamentoServicoPublicidade(this.orcamentoEntity)
+  //     .then((orcamentoEntityResult: OrcamentoEntity) => {
+  //       this.loading.dismiss();
+  //       this.presentToast();
   //     }, (err) => {
   //       this.loading.dismiss();
   //       this.alertCtrl.create({
@@ -327,41 +349,15 @@ export class PrincipalPage {
   //         buttons: ['OK']
   //       }).present();
   //     });
-  //   }
-  //   catch (err){
+
+  //   } catch (err){
   //     if(err instanceof RangeError){
   //       console.log('out of range');
   //     }
   //     console.log(err);
   //   }
+    
   // }
 
-  // detalheVaga(idVaga) {
-  //   this.navCtrl.push(DetalheVagaPage, {
-  //     idVaga: idVaga
-  //   })
-  // }
-
-  // getLanguage() {
-  //   this._idioma = sysOptions.systemLanguage == 'pt-br' ? 'pt-br' : 'en';
-  //   this.selectedLanguage = localStorage.getItem(Constants.IDIOMA_USUARIO);
-  //   // this._storage.get('selectedLanguage').then((selectedLanguage) => {
-  //       if(!this.selectedLanguage){
-  //         this.selectedLanguage = this._idioma;
-  //       }
-  //       else if(this.selectedLanguage) {
-  //         this.selectedLanguage = this.selectedLanguage;
-  //         if (this.selectedLanguage == 'pt-br') {
-  //           this.loadingText = 'Procurando vagas...';
-  //         } else {
-  //           this.loadingText = 'Looking for vacancies...';
-  //         }
-  //       }
-  //       // this.getVagasDestaquePrincipal();
-  //       this.translate.use(this.selectedLanguage);
-
-  //     // });
-
-  // }
 
 }
