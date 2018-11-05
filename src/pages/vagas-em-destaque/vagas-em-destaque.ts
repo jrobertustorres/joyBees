@@ -33,7 +33,7 @@ export class VagasEmDestaquePage {
 
   public languageDictionary: any;
 
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
               public alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
               private vagaService: VagaService,
@@ -60,6 +60,7 @@ export class VagasEmDestaquePage {
       .subscribe(dados => {
         this.languageDictionary = dados;
         if(this.idUsuario) {
+          //this.fromFilter = false;
           this.getVagasList(this.vagaDetalheEntity);
         } else {
           this.getVagasDestaque();
@@ -134,7 +135,7 @@ export class VagasEmDestaquePage {
 
   detalheVaga(idVaga) {
     localStorage.setItem(Constants.ID_VAGA_CANDIDATAR, idVaga);
-    
+
     if(!localStorage.getItem(Constants.ID_USUARIO)) {
       this.showAlertNaoLogado();
     } else {
@@ -153,25 +154,13 @@ export class VagasEmDestaquePage {
     }, 2000);
   }
 
-  // selectedTabChanged($event): void {
-  //   console.log('entrei no selected change');
-  //   console.log($event);
-  //   if ($event._value == "vagasCidade") {
-  //     this.getVagasList(this.vagaDetalheEntity);
-  //   } 
-  //   else {
-  //     if ($event._value == "vagasDestaque") {
-  //       // this.getVagasDestaquePrincipal();
-  //     } 
-  //   }
-  // }
-
   openModalFiltro(){
     let modal = this.modalCtrl.create(ModalFiltroPage);
 
     modal.onDidDismiss((data) => {
       if (data) {
         // this.segment = "vagasCidade";
+        this.refresh = false;
         this.getVagasList(data.filter);
       }
     });
@@ -182,10 +171,8 @@ export class VagasEmDestaquePage {
   getVagasList(filtro) {
     try {
       this.vagaDetalheEntity = filtro;
-
       this.vagaDetalheEntity.limiteDados = this.vagaDetalheEntity.limiteDados ? this.vagas.length : null;
 
-      // if(this.vagaDetalheEntity.limiteDados == null) {
       if(this.refresh == false) {
         this.loading = this.loadingCtrl.create({
           content: this.languageDictionary.LOADING_TEXT,
@@ -197,13 +184,9 @@ export class VagasEmDestaquePage {
         .then((vagasListaEntityResult: VagaListaEntity) => {
           this.vagas = vagasListaEntityResult;
           this.vagaDetalheEntity.limiteDados = this.vagas.length;
-          // this.vagas.limiteDados = this.vagas.length;
 
           this.refresh = true;
           this.loading ? this.loading.dismiss() : '';
-          // setTimeout(() => {
-          //   this.loading ? this.loading.dismiss() : '';
-          // }, 500);
       }, (err) => {
         this.loading ? this.loading.dismiss() : '';
         this.alertCtrl.create({

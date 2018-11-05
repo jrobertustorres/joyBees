@@ -47,6 +47,42 @@
                 <ion-input formControlName="idade" [(ngModel)]="usuarioDetalheEntity.idade" type="number" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></ion-input>
             </ion-item>
             <div *ngIf="!dadosUsuarioForm.get('idade').valid && dadosUsuarioForm.get('idade').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
+            <ion-item>
+                <ion-label class="my-label">{{ 'LABEL_DISP_MUDANCA' | translate }}</ion-label>
+                <ion-select formControlName="disponibilidadeMudanca" [(ngModel)]="usuarioDetalheEntity.disponibilidadeMudanca" class="font-size-select capitalize-enum" cancelText="{{ 'CANCELAR' | translate }}">
+                    <ion-option value="true">{{ 'LABEL_SIM' | translate }}</ion-option>
+                    <ion-option value="false">{{ 'LABEL_NAO' | translate }}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="!dadosUsuarioForm.get('disponibilidadeMudanca').valid && dadosUsuarioForm.get('disponibilidadeMudanca').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
+            <ion-item>
+                <ion-label class="my-label">{{ 'LABEL_DISP_HORA_EXTRA' | translate }}</ion-label>
+                <ion-select formControlName="disponibilidadeHoraExtra" [(ngModel)]="usuarioDetalheEntity.disponibilidadeHoraExtra" class="font-size-select capitalize-enum" cancelText="{{ 'CANCELAR' | translate }}">
+                    <ion-option value="true">{{ 'LABEL_SIM' | translate }}</ion-option>
+                    <ion-option value="false">{{ 'LABEL_NAO' | translate }}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="!dadosUsuarioForm.get('disponibilidadeHoraExtra').valid && dadosUsuarioForm.get('disponibilidadeHoraExtra').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
+            <ion-item>
+                <ion-label class="my-label">{{ 'LABEL_POSSUI_FILHOS' | translate }}</ion-label>
+                <ion-select formControlName="possuiFilhos" [(ngModel)]="usuarioDetalheEntity.possuiFilhos" (ionChange)="showIdadeFilhoCacula($event)" class="font-size-select capitalize-enum" cancelText="{{ 'CANCELAR' | translate }}">
+                    <ion-option value="true">{{ 'LABEL_SIM' | translate }}</ion-option>
+                    <ion-option value="false">{{ 'LABEL_NAO' | translate }}</ion-option>
+                </ion-select>
+            </ion-item>
+            <!-- <div *ngIf="!dadosUsuarioForm.get('possuiFilhos').valid && dadosUsuarioForm.get('possuiFilhos').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div> -->
+
+            <!-- <ion-item [hidden]="escondeIdade"> -->
+            <ion-item>
+                <ion-label stacked>{{ 'IDADE_FILHO_CACULA' | translate }}</ion-label>
+                <ion-input formControlName="idadeFilhoCacula" [(ngModel)]="usuarioDetalheEntity.idadeFilhoCacula" type="number" [readonly]="escondeIdade" [required]="!escondeIdade"></ion-input>
+            </ion-item>
+            <!-- <div *ngIf="!escondeIdade" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div> -->
+            <div *ngIf="!dadosUsuarioForm.get('idadeFilhoCacula').valid && dadosUsuarioForm.get('idadeFilhoCacula').touched" [ngClass]="'class-error-form'">{{ 'CAMPO_OBRIGATORIO' | translate }}</div>
+
         </div>
 
         <ion-item>

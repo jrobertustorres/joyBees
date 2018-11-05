@@ -27,7 +27,7 @@ export class DetalheVagaPage {
   private messagePresentToast: string;
   public languageDictionary: any;
 
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
@@ -36,7 +36,7 @@ export class DetalheVagaPage {
               private vagaService: VagaService) {
 
     this.vagaDetalheEntity = new VagaDetalheEntity();
-    this.idVagaUsuario = navParams.get('idVagaUsuario');
+    //this.idVagaUsuario = navParams.get('idVagaUsuario');
     this.idVaga = navParams.get('idVaga');
 
   }
@@ -89,12 +89,13 @@ export class DetalheVagaPage {
       });
       this.loading.present();
 
-      this.vagaDetalheEntity.idVagaUsuario = this.idVagaUsuario;
+      //this.vagaDetalheEntity.idVagaUsuario = this.idVagaUsuario;
       this.vagaDetalheEntity.idVaga = this.idVaga;
-   
+
       this.vagaService.findVagaDetalhe(this.vagaDetalheEntity)
         .then((vagaDetalheEntityResult: VagaDetalheEntity) => {
           this.vagaDetalheEntity = vagaDetalheEntityResult;
+
           this.loading.dismiss();
         }, (err) => {
           this.loading.dismiss();
@@ -114,52 +115,59 @@ export class DetalheVagaPage {
 
   }
 
-  verificaCandidatoVaga(idVaga, idVagaUsuario) {
+  verificaCandidatoVaga(idVaga) {
+
     if(!localStorage.getItem(Constants.IS_CADASTRO_COMPLETO_VAGA)){
       this.showAlertCadastroCompleto();
     } else {
-      if (this.vagaDetalheEntity.isCandidatado) {
-        let alert = this.alertCtrl.create({
-          title: this.languageDictionary.MESSAGE_TITLE_DESCARTAR_VAGA,
-          subTitle: this.languageDictionary.MESSAGE_DESCARTAR_VAGA,
-          buttons: [
-            {
-              text: this.languageDictionary.BTN_MANTER_VAGA,
-              cssClass: 'btnCancelCss',
-              role: 'cancel',
-            },
-            {
-              text: this.languageDictionary.BTN_DESCARTAR_VAGA,
-              cssClass: 'btnDescartCss',
-              handler: () => {
-                this.descartarVaga(idVagaUsuario);
-              }
-            }
-          ]
-        });
-        alert.present();
-        
+
+      if(!localStorage.getItem(Constants.CAMERA_DATA)) {
+        this.showAlertFotoPerfil();
       } else {
-        let alert = this.alertCtrl.create({
-          title: this.languageDictionary.MESSAGE_TITLE_CANDIDATAR,
-          subTitle: this.languageDictionary.MESSAGE_SUBTITLE_VAGA,
-          buttons: [
-            {
-              text: this.languageDictionary.CANCELAR_UPPER,
-              cssClass: 'btnCancelCss',
-              role: 'cancel',
-            },
-            {
-              text: this.languageDictionary.BTN_CANDIDATAR_VAGA,
-              cssClass: 'btnCandidatCss',
-              handler: () => {
-                this.candidatarVaga(idVaga);
+
+        if (this.vagaDetalheEntity.isCandidatado) {
+          let alert = this.alertCtrl.create({
+            title: this.languageDictionary.MESSAGE_TITLE_DESCARTAR_VAGA,
+            subTitle: this.languageDictionary.MESSAGE_DESCARTAR_VAGA,
+            buttons: [
+              {
+                text: this.languageDictionary.BTN_MANTER_VAGA,
+                cssClass: 'btnCancelCss',
+                role: 'cancel',
+              },
+              {
+                text: this.languageDictionary.BTN_DESCARTAR_VAGA,
+                cssClass: 'btnDescartCss',
+                handler: () => {
+                  this.descartarVaga();
+                }
               }
-            }
-          ]
-        });
-        alert.present();
-        
+            ]
+          });
+          alert.present();
+
+        } else {
+          let alert = this.alertCtrl.create({
+            title: this.languageDictionary.MESSAGE_TITLE_CANDIDATAR,
+            subTitle: this.languageDictionary.MESSAGE_SUBTITLE_VAGA,
+            buttons: [
+              {
+                text: this.languageDictionary.CANCELAR_UPPER,
+                cssClass: 'btnCancelCss',
+                role: 'cancel',
+              },
+              {
+                text: this.languageDictionary.BTN_CANDIDATAR_VAGA,
+                cssClass: 'btnCandidatCss',
+                handler: () => {
+                  this.candidatarVaga(idVaga);
+                }
+              }
+            ]
+          });
+          alert.present();
+
+        }
       }
     }
   }
@@ -175,13 +183,13 @@ export class DetalheVagaPage {
           content: this.languageDictionary.LOADING_TEXT,
         });
         this.loading.present();
-  
+
         this.vagaService.callCandidatarVaga(idVaga)
           .then((vagaDetalheEntityResult: VagaDetalheEntity) => {
             this.loading.dismiss();
-  
+
             this.messagePresentToast = this.languageDictionary.MESSAGE_PARABENS_CANDIDATADO;
-  
+
             this.presentToast();
             setTimeout(() => {
               this.navCtrl.setRoot(PrincipalPage);
@@ -194,7 +202,7 @@ export class DetalheVagaPage {
             }).present();
           });
       // }
-      
+
     }
     catch (err){
       if(err instanceof RangeError){
@@ -223,18 +231,33 @@ export class DetalheVagaPage {
     alert.present();
   }
 
-  descartarVaga(idVagaUsuario) {
+  showAlertFotoPerfil() {
+    let alert = this.alertCtrl.create({
+      title: this.languageDictionary.FOTO_PERFIL_TITLE,
+      subTitle: this.languageDictionary.MESSAGE_SUBTIBLE_FOTO_PERFIL,
+      buttons: [
+        {
+          text: this.languageDictionary.BTN_OK,
+          handler: () => {
+          }
+        },        
+      ]
+    });
+    alert.present();
+  }
+
+  descartarVaga() {
     try {
-      
+
       this.loading = this.loadingCtrl.create({
         content: this.languageDictionary.LOADING_TEXT,
       });
       this.loading.present();
 
-      this.vagaService.callDescartarVaga(idVagaUsuario)
+      this.vagaService.descandidatarVaga(this.idVaga)
         .then((vagaDetalheEntityResult: VagaDetalheEntity) => {
           this.loading.dismiss();
-          this.messagePresentToast = this.languageDictionary.MESSAGE_PARABENS_CANDIDATADO; 
+          this.messagePresentToast = this.languageDictionary.MESSAGE_DESCANDIDATADO;
           this.presentToast();
           setTimeout(() => {
             this.navCtrl.setRoot(PrincipalPage);

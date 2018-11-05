@@ -14,6 +14,10 @@ export class CotacaoEntity {
   public idOrcamentoFormat: string;
   public dataCadastroFormat: string;
 
+  public nomeEstado: string;
+  public nomeCidade: string;
+  public nomeServico: string;
+
   public limiteDados: number;
 
   constructor(){

@@ -2,7 +2,7 @@
 <widget id="com.logiictecnologia.joybees" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>JoyBees</name>
     <description>An awesome JoyBees app.</description>
-    <author email="diretoria@logiic.com.br" href="joybees.com">Logiic Tecnology Team</author>
+    <author email="diretoria@logiic.com.br" href="joybees.com">Logiic Technology Team</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -52,6 +52,7 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <allow-navigation href="*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
@@ -115,11 +116,10 @@
     <plugin name="cordova-android-firebase-gradle-release" spec="^1.0.2">
         <variable name="FIREBASE_VERSION" value="15.+" />
     </plugin>
-    <engine name="android" spec="^6.3.0" />
-    <engine name="ios" spec="^4.5.5" />
-    <plugin name="cordova-plugin-facebook4" spec="^2.3.0">
+    <plugin name="cordova-plugin-facebook4" spec="^1.7.4">
         <variable name="APP_ID" value="210518629503681" />
         <variable name="APP_NAME" value="joyBees" />
-        <variable name="ANDROID_SDK_VERSION" value="4.+" />
     </plugin>
+    <engine name="android" spec="^6.3.0" />
+    <engine name="ios" spec="^4.5.5" />
 </widget>

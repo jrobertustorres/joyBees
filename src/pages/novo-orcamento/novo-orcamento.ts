@@ -39,7 +39,9 @@ export class NovoOrcamentoPage {
   private orcamentoEntity: OrcamentoEntity;
   public idUsuario: string;
 
-  constructor(public navCtrl: NavController, 
+  public valueI: any;
+
+  constructor(public navCtrl: NavController,
               public loadingCtrl: LoadingController,
               private servicoService: ServicoService,
               private orcamentoService: OrcamentoService,
@@ -94,7 +96,7 @@ export class NovoOrcamentoPage {
 
   presentToast() {
     let toast = this.toastCtrl.create({
-      message: 'Seu orçamento foi lançado!',
+      message: this.languageDictionary.MESSAGE_ORCAMENTO_LANCADO,
       duration: 3000,
       position: 'bottom',
       cssClass: "toast-success"
@@ -137,13 +139,14 @@ export class NovoOrcamentoPage {
       console.log(err);
     }
   }
-  
+
   toggleSection(i) {
-    
+    this.valueI = i;
+
     if(this.auxIndex == i || this.auxIndex == null) {
       this.auxIndex = i;
     }
-    
+
     if(this.auxIndex!=i) {
       this.listServicoResposta[this.auxIndex].open = false;
       this.auxIndex = i;
@@ -151,16 +154,16 @@ export class NovoOrcamentoPage {
 
     this.listServicoRespostaChild = this.listServicoResposta[i].listServicos;
     this.listServicoResposta[i].open = !this.listServicoResposta[i].open;
-    
+
     for(let i=0; i < this.listServicoRespostaChild.length; i++) {
       this.listServicoRespostaChild[i].serviceChecked = false;
       for(let j=0; j < this.servicosSelecionados.length; j++) {
         if (this.listServicoRespostaChild[i].idServico == this.servicosSelecionados[j]) {
           this.listServicoRespostaChild[i].serviceChecked = true;
-        } 
+        }
       }
-    }    
-      
+    }
+
   }
 
   servicosChecked(idServico, nomeServico, quantidadeObrigatorio) {
@@ -168,9 +171,19 @@ export class NovoOrcamentoPage {
 
     if (index != -1) {
       this.servicosSelecionados.splice(index, 1);
+      this.dadosOrcamento.splice(index, 1);
     } else {
       this.servicosSelecionados.push(idServico);
       this.openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio);
+    }
+
+    for(let i=0; i < this.listServicoRespostaChild.length; i++) {
+      this.listServicoRespostaChild[i].serviceChecked = false;
+      for(let j=0; j < this.servicosSelecionados.length; j++) {
+        if (this.listServicoRespostaChild[i].idServico == this.servicosSelecionados[j]) {
+          this.listServicoRespostaChild[i].serviceChecked = true;
+        }
+      }
     }
 
   }
@@ -183,7 +196,7 @@ export class NovoOrcamentoPage {
         } else {
           this.getGpsPosition();
         }
-        
+
       } else {
         this.showAlert();
       }
@@ -214,25 +227,6 @@ export class NovoOrcamentoPage {
     confirm.present();
   }
 
-  // showAlertCadastroCompleto() {
-  //   let alert = this.alertCtrl.create({
-  //     title: this.languageDictionary.CADASTRO_IMCOPLETO_TEXT,
-  //     subTitle: this.languageDictionary.MESSAGE_SUBTIBLE_CADASTRO_INCOMPLETO_SERVICO,
-  //     buttons: [
-  //       {
-  //         text: this.languageDictionary.CANCELAR,
-  //       },
-  //       {
-  //         text: this.languageDictionary.BTN_CONFIG,
-  //         handler: () => {
-  //           this.navCtrl.setRoot(ConfiguracoesPage);
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   alert.present();
-  // }
-
   showAlert() {
     let alert = this.alertCtrl.create({
       title: this.languageDictionary.MESSAGE_TITLE_FALHA,
@@ -245,9 +239,9 @@ export class NovoOrcamentoPage {
   getGpsStatus() {
     let successCallback = (isAvailable) => { console.log('Is available? ' + isAvailable); };
     let errorCallback = (e) => console.error(e);
-      
+
       this.diagnostic.isLocationEnabled().then(successCallback).catch(errorCallback);
-      
+
       // only android
       this.diagnostic.isGpsLocationEnabled().then(successCallback, errorCallback);
 
@@ -262,10 +256,11 @@ export class NovoOrcamentoPage {
               this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
               .then(
                 () => this.getGpsPosition(),
-                error => this.showLocationText()
+                error => this.lancarOrcamento(0, 0) //lanço de toda forma
+                // error => this.showLocationText()
               );
             }
-          
+
           });
         }
       }).catch(e => console.error(e));
@@ -273,8 +268,7 @@ export class NovoOrcamentoPage {
 
   getGpsPosition() {
     this.loading = this.loadingCtrl.create({
-      content: this.languageDictionary.LOADING_TEXT,
-      dismissOnPageChange: true
+      content: this.languageDictionary.LOADING_TEXT
     });
     this.loading.present();
 
@@ -282,17 +276,25 @@ export class NovoOrcamentoPage {
       // pegamos as coords para ir lançando pra quem está mais perto - no inicio vamos lançar para todos os fornecedores
       this.lancarOrcamento(resp.coords.latitude, resp.coords.longitude);
      }).catch((error) => {
-       console.log('Error getting location', error);
-        this.loading.dismiss();
+       // mesmo se não pegarmos a posição, lançamos para todos os fornecedores
+       // aqui verificar se não pegou chamar novamente
+      this.lancarOrcamento(0, 0);
      });
   }
 
   lancarOrcamento(latitude, longitude) {
 
     try {
-      this.orcamentoEntity.latitudePes = latitude; 
-      this.orcamentoEntity.longitudePes = longitude; 
-      this.orcamentoEntity.limitDados = 0; 
+
+      if(latitude == 0 && longitude == 0) {
+        this.loading = this.loadingCtrl.create({
+          content: this.languageDictionary.LOADING_TEXT
+        });
+        this.loading.present();
+      }
+      this.orcamentoEntity.latitudePes = latitude;
+      this.orcamentoEntity.longitudePes = longitude;
+      this.orcamentoEntity.limitDados = 0;
       this.orcamentoEntity.listServicoOrcamento = this.dadosOrcamento;
 
       this.orcamentoService
@@ -317,7 +319,7 @@ export class NovoOrcamentoPage {
       }
       console.log(err);
     }
-    
+
   }
 
   showLocationText() {
@@ -326,8 +328,9 @@ export class NovoOrcamentoPage {
       message: this.languageDictionary.MESSAGE_SUBTITLE_LOCATION,
       buttons: [
         {
-          text: 'OK!',
+          text: 'OK',
           handler: data => {
+            this.lancarOrcamento(0,0);
           }
         }
       ]
@@ -336,15 +339,59 @@ export class NovoOrcamentoPage {
   }
 
   openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio){
-    let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServico: idServico, nomeServico: nomeServico, quantidadeObrigatorio: quantidadeObrigatorio});
+    let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage,
+      {idServico: idServico, nomeServico: nomeServico, quantidadeObrigatorio: quantidadeObrigatorio});
 
     modal.onDidDismiss((data) => {
+
       if (data) {
         this.dadosOrcamento.push(data.filter);
+        this.showConfirm();
+      } else {
+
+        for(let i=0; i < this.listServicoRespostaChild.length; i++) {
+          for(let j=0; j < this.servicosSelecionados.length; j++) {
+            if (this.listServicoRespostaChild[i].idServico == this.servicosSelecionados[j]) {
+              this.listServicoRespostaChild[i].serviceChecked = false;
+            }
+          }
+        }
+
+        let index = this.servicosSelecionados.indexOf(idServico);
+
+        if (index != -1) {
+          this.servicosSelecionados.splice(index, 1);
+        } else {
+          this.servicosSelecionados.push(idServico);
+          this.openModalMaisInformacoes(idServico, nomeServico, quantidadeObrigatorio);
+        }
       }
     });
 
     modal.present();
+  }
+
+  showConfirm() {
+    const confirm = this.alertCtrl.create({
+      title: 'Adicionado ao orçamento',
+      message: 'O produto/serviço foi adicionado ao orçamento',
+      buttons: [
+        {
+          text: 'Adicionar mais itens',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Lançar orçamento agora',
+          handler: () => {
+            this.verificaServicosSelecionados();
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   goToLogin() {

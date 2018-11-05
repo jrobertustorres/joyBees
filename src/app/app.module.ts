@@ -63,8 +63,9 @@ import { DetalhaServicoOrcamentoByUsuarioPage } from '../pages/detalha-servico-o
 import { ModalImagemFornecedorPage } from '../pages/modal-imagem-fornecedor/modal-imagem-fornecedor';
 import { ModalAvaliacaoServicoFornecedorPage } from './../pages/modal-avaliacao-servico-fornecedor/modal-avaliacao-servico-fornecedor';
 import { MeuEnderecoPage } from '../pages/meu-endereco/meu-endereco';
+import { AvaliacaoFornecedorPage } from '../pages/avaliacao-fornecedor/avaliacao-fornecedor';
 
-//ENTITYS
+//ENTITIES
 import { UsuarioDetalheEntity } from '../model/usuario-detalhe-entity';
 import { CidadeEntity } from '../model/cidade-entity';
 import { VagaListaEntity } from '../model/vaga-lista-entity';
@@ -145,7 +146,8 @@ function provideStorage() {
     DetalhaServicoOrcamentoByUsuarioPage,
     ModalImagemFornecedorPage,
     ModalAvaliacaoServicoFornecedorPage,
-    MeuEnderecoPage
+    MeuEnderecoPage,
+    AvaliacaoFornecedorPage
   ],
   imports: [
     HttpModule,
@@ -162,8 +164,8 @@ function provideStorage() {
     // IonicModule.forRoot(MyApp),
     IonicModule.forRoot(MyApp, {
       backButtonText: '',
-    },
-  )
+      },
+    )
   ],
 
   bootstrap: [IonicApp],
@@ -194,7 +196,8 @@ function provideStorage() {
     DetalhaServicoOrcamentoByUsuarioPage,
     ModalImagemFornecedorPage,
     ModalAvaliacaoServicoFornecedorPage,
-    MeuEnderecoPage
+    MeuEnderecoPage,
+    AvaliacaoFornecedorPage
   ],
   providers: [
     StatusBar,

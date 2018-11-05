@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { FormBuilder,	FormGroup, Validators } from '@angular/forms';
 import { DatePicker } from '@ionic-native/date-picker';
 
@@ -24,10 +24,11 @@ export class ModalInformacoesPorSevicoPage {
   public languageDictionary: any;
   private orcamentoEntity: OrcamentoEntity;
 
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private formBuilder: FormBuilder,
               private datePicker: DatePicker,
+              public platform: Platform,
               private languageTranslateService: LanguageTranslateService,
               public viewCtrl: ViewController) {
     this.orcamentoEntity = new OrcamentoEntity();
@@ -40,15 +41,22 @@ export class ModalInformacoesPorSevicoPage {
   ngOnInit() {
     this.getTraducao();
 
-    // this.dataSolicitacao = new Date().toISOString(); //TIRAR DEPOIS
+    //para testes no browser
+    if (!this.platform.is('cordova')) {
+      this.dataSolicitacao = new Date().toISOString();
+    }
 
     this.lancarOrcamentoForm = this.formBuilder.group({
       'dataSolicitacao': [''],
-      'quantidade': ['', [Validators.maxLength(100)]],
-      'descricao': ['', [Validators.maxLength(100)]],
-    }
-    );
+      'quantidade': [''],
+      'descricao': ['', [Validators.required, Validators.maxLength(100)]],
+    });
     this.lancarOrcamentoForm.controls.dataSolicitacao.disable();
+
+    if(this.quantidadeObrigatorio) {
+      this.lancarOrcamentoForm.get('quantidade').setValidators([Validators.required]);
+    }
+
   }
 
   ionViewDidLoad() {
@@ -65,6 +73,7 @@ export class ModalInformacoesPorSevicoPage {
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
+
       });
     }
     catch (err){
@@ -98,18 +107,19 @@ export class ModalInformacoesPorSevicoPage {
     });
   }
 
-  // ANTES DE SUBMETER, VERIFICAR O ISCADASTROCOMPLETOSERVICO
-  submeterOrcamento() {
+  //submeterOrcamento() {
+  validaFormOrcamento() {
     try {
       if (this.lancarOrcamentoForm.valid) {
         this.lancarOrcamentoForm.value.idServicoFornecedor = this.idServicoFornecedor ? this.idServicoFornecedor : null;
         let dataSolicitacao = new Date(this.dataSolicitacao);
         this.lancarOrcamentoForm.value.dataSolicitacao = dataSolicitacao;
         this.lancarOrcamentoForm.value.idServico = this.idServico;
+
         this.viewCtrl.dismiss({
           filter: this.lancarOrcamentoForm.value
         });
-        
+
       } else {
         Object.keys(this.lancarOrcamentoForm.controls).forEach(campo => {
           const controle = this.lancarOrcamentoForm.get(campo);
@@ -123,6 +133,6 @@ export class ModalInformacoesPorSevicoPage {
       }
       console.log(err);
     }
-  }
+  }  
 
 }

@@ -4,6 +4,7 @@ export class DetalheCotacaoEntity {
     public idFornecedor: number;
     public idOrcamento: number;
     public idServicoFornecedor: number;
+    public idOrcamentoFormat: string;
     public valorTotalFormat: string;
     public dataEntregaFormat: string;
     public validadeFormat: string;
@@ -22,11 +23,15 @@ export class DetalheCotacaoEntity {
 
     public descricao: string;
     public nomeServico: string;
-    public dataSolicitacaoFormat: number;
+    public dataCadastroFormat: string;
+    public dataSolicitacaoFormat: string;
     public quantidade: number;
     public valor: number;
     public observacaoFornecedor: string;
     public respostaFornecedor: boolean;
+
+    public nomeEstado: string;
+    public nomeCidade: string;
 
     constructor(){
     }

@@ -12,6 +12,12 @@
 </ion-header>
 
 <ion-content class="content-stable">
+    <div class="h2-color-cards div-margin-images" text-wrap padding *ngIf="imagensResult?.length == 0">
+        <div class="div-style-images"><strong>{{ 'LABEL_FORNECEDOR_SEM_IMAGEM' | translate }}</strong></div>
+        <div style="text-align: center;">
+            <ion-icon class="icon-style-images" ios="ios-images" md="md-images"></ion-icon>
+        </div>
+    </div>
 
     <ion-slides (ionSlideDidChange)="slideChanged()">
         <ion-slide *ngFor="let imagem of imagensResult">

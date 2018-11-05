@@ -3,8 +3,6 @@ import { IonicPage, NavController, NavParams, MenuController, ModalController, L
 import { Constants } from '../../app/constants';
 import { Facebook } from '@ionic-native/facebook';
 
-import { Storage } from '@ionic/storage';
-
 //PAGES
 import { LoginPage } from '../login/login';
 import { MeusDadosPage } from '../meus-dados/meus-dados';
@@ -40,20 +38,34 @@ export class HomePage {
 
   public languageDictionary: any;
 
-  constructor(public navCtrl: NavController, 
+  isLoggedIn: boolean = false;
+  users: any;
+
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private menu : MenuController,
               // translate: TranslateService,
               public alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
-              // private _storage: Storage,
-              public facebook: Facebook,
-              private loginService: LoginService, 
-              private languageTranslateService: LanguageTranslateService, 
+              public fb: Facebook,
+              private loginService: LoginService,
+              private languageTranslateService: LanguageTranslateService,
               public modalCtrl: ModalController) {
 
     this.loginPage = navParams.get('loginPage');
     this.usuarioEntity = new UsuarioEntity();
+
+    if(localStorage.getItem(Constants.ID_USUARIO)) {
+      fb.getLoginStatus()
+      .then(res => {
+        if(res.status === "connect") {
+          this.isLoggedIn = true;
+        } else {
+          this.isLoggedIn = false;
+        }
+      })
+      .catch(e => console.log(e));
+    }
 
     // this.fb.browserInit(this.FB_APP_ID, "v2.8");
 
@@ -105,7 +117,7 @@ export class HomePage {
   goVagasEmDestaque() {
     this.navCtrl.push(VagasEmDestaquePage);
   }
-  
+
   goFornecedoresEmDestaque() {
     this.navCtrl.push(NovoOrcamentoPage);
   }
@@ -120,7 +132,7 @@ export class HomePage {
     modal.present();
   }
 
-  //método para chamar api do facebook e salvar no banco o usuario    
+  //método para chamar api do facebook e salvar no banco o usuario
   // loginFacebook() {
   //   let permissions = new Array<string>();
   //   permissions = ["public_profile", "email"];
@@ -147,7 +159,18 @@ export class HomePage {
   //   });
   // }
 
-  // doFbLogin(){
+  doFbLogin(){
+    // this.fb.login(['public_profile', 'user_friends', 'email'])
+    this.fb.login(['public_profile', 'email'])
+    .then(res => {
+      if(res.status === "connected") {
+        this.isLoggedIn = true;
+        this.getUserDetail(res.authResponse.userID);
+      } else {
+        this.isLoggedIn = false;
+      }
+    })
+    .catch(e => console.log('Error logging into Facebook', e));
   //   let permissions = new Array<string>();
   //   // let nav = this.navCtrl;
 	//   let env = this;
@@ -191,7 +214,27 @@ export class HomePage {
   //   }, function(error){
   //     console.log(error);
   //   });
-  // }
+  }
+
+  getUserDetail(userid) {
+    this.fb.api("/"+userid+"/?fields=id,email,name,picture,gender",["public_profile"])
+      .then(res => {
+        this.users = res;
+        this.usuarioEntity.idUsuarioFacebook = this.users.id;
+        this.usuarioEntity.nomePessoa = this.users.name;
+        this.usuarioEntity.genero = this.users.gender;
+        //this.usuarioEntity.imagemPessoaBs64 = this.users.picture.data.url;
+        this.usuarioEntity.login = this.users.email;
+
+  //      console.log(JSON.stringify(this.usuarioEntity));
+        //localStorage.setItem(Constants.CAMERA_DATA, this.users.picture.data.url); // TESTAR  <===================
+
+      this.callLoginFacebook(this.usuarioEntity);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  }
 
   callLoginFacebook(usuarioEntity) {
     this.loginService.loginFacebook(usuarioEntity)

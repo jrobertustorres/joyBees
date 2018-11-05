@@ -18,6 +18,7 @@ import { DetalhaServicoOrcamentoByUsuarioPage } from '../detalha-servico-orcamen
 })
 export class OrcamentosListByStatusPage {
   public status: string;
+  public statusEnum: string;
   private orcamentoEntity: OrcamentoEntity;
   private orcamentosList: any;
   public loading = null;
@@ -32,6 +33,7 @@ export class OrcamentosListByStatusPage {
               public navParams: NavParams) {
     this.status = navParams.get("status");
     this.orcamentoEntity = new OrcamentoEntity();
+
   }
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class OrcamentosListByStatusPage {
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
+        this.getStatusTranslate();
         this.findCotacoesListByStatus();
       });
     }
@@ -154,7 +157,7 @@ export class OrcamentosListByStatusPage {
   }
 
   verificaStatus(idServicoOrcamento) {
-    if (this.status =='RESPONDIDO') {
+    if (this.status == 'RESPONDIDO') {
       this.openCotacoesRespondidasList(idServicoOrcamento);
     } else {
       this.openDetalhaServicoOrcamentoByUsuario(idServicoOrcamento);
@@ -167,6 +170,31 @@ export class OrcamentosListByStatusPage {
 
   openDetalhaServicoOrcamentoByUsuario(idServicoOrcamento) {
     this.navCtrl.push(DetalhaServicoOrcamentoByUsuarioPage, {idServicoOrcamento: idServicoOrcamento});
+  }
+
+  getStatusTranslate() {
+    switch(this.status) { 
+      case 'ABERTO': { 
+          this.statusEnum = this.languageDictionary.LABEL_STATUS_ENUM_ABERTO;
+          break; 
+      } 
+      case 'RESPONDIDO': { 
+          this.statusEnum = this.languageDictionary.LABEL_STATUS_ENUM_RESPONDIDO;
+          break; 
+      } 
+      case 'ESCOLHIDO': { 
+          this.statusEnum = this.languageDictionary.LABEL_STATUS_ENUM_ESCOLHIDO;
+          break; 
+      } 
+      case 'CONCLUIDO': { 
+          this.statusEnum = this.languageDictionary.LABEL_STATUS_ENUM_CONCLUIDO;
+          break; 
+      } 
+      default: { 
+          //statements; 
+          break; 
+      } 
+    } 
   }
 
 }

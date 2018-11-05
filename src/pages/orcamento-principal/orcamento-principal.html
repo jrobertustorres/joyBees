@@ -58,6 +58,9 @@
         <ion-item class="card-escolhidos-color">
             <ion-icon ios="ios-list" md="md-list" item-start large class="card-escolhidos-color"></ion-icon>
             <h2 class="h2-color-cards"><b>{{ 'ORCAMENTOS_ESCOLHIDOS' | translate }} - {{ cotacaoOrcamentoUsuarioEntity.cotacaoEscolhida }} </b></h2>
+            <!-- <ion-chip>
+                <ion-label color="secondary">Secondary Label</ion-label>
+            </ion-chip> -->
         </ion-item>
 
         <ion-item>
@@ -82,9 +85,8 @@
         </ion-item>
     </ion-card>
 
-    <!-- <ion-fab bottom right *ngIf="tipoUsuarioSelecionado == 'cliente'"> -->
     <ion-fab bottom right>
-        <button ion-fab mini (click)="novoOrcamento()"><ion-icon name="add"></ion-icon></button>
+        <button ion-fab (click)="novoOrcamento()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
 </ion-content>

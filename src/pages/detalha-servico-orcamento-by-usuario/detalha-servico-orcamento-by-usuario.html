@@ -11,86 +11,112 @@
 
 </ion-header>
 
-<ion-content>
-    <div *ngIf="detalheServicoOrcamentoEntity.idOrcamento != null" text-wrap style="margin-bottom: 60px;">
-        <!-- <div padding *ngIf="detalheOrcamentoEntity.statusOrcamentoEnum == 'CONCLUIDO'">
-            <p *ngIf="detalheOrcamentoEntity.qtdAvaliacaoOrdemServico == null">
-                <ion-icon ios="ios-star" md="md-star" color="secondaryColor" (click)="modalAvaliacao(fab)"> Avalie este atendimento</ion-icon>
+<ion-content class="content-stable">
+    <ion-card *ngIf="detalheServicoOrcamentoEntity.nomeServico != null" text-wrap style="margin-bottom: 60px;">
+        <div padding *ngIf="detalheServicoOrcamentoEntity.statusCotacaoEnum == 'CONCLUIDO'">
+            <p *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao == null || detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao == 0">
+                <ion-icon ios="ios-star" md="md-star" color="secondaryColor" (click)="modalAvaliacao(fab)"> {{ 'LABEL_AVALIE_FORNECEDOR' | translate }}</ion-icon>
             </p>
-            <p *ngIf="detalheOrcamentoEntity.qtdAvaliacaoOrdemServico != null">
-                <span style="color: #1E7F41">Você avaliou este fornecedor com {{detalheOrcamentoEntity.qtdAvaliacaoOrdemServico}} estrelas</span>
+            <p *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao != null">
+                <span style="color: #1E7F41" *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao == 1">{{ 'LABEL_AVALIADO' | translate }} {{detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao}} {{ 'LABEL_ESTRELA' | translate }}</span>
+                <span style="color: #1E7F41" *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao > 1">{{ 'LABEL_AVALIADO' | translate }} {{detalheServicoOrcamentoEntity.qtdAvaliacaoCotacao}} {{ 'LABEL_ESTRELA' | translate }}s</span>
             </p>
-        </div> -->
-
-        <div padding style="margin-top: -10px;">
-            <p>{{ 'NUMERO_ORCAMENTO' | translate }}: <b>{{ detalheServicoOrcamentoEntity.idOrcamento }}</b></p>
-            <p>{{ 'SERVICO' | translate }}: {{ detalheServicoOrcamentoEntity.nomeServico }}</p>
-            <p>{{ 'DATA_SOLICITACAO' | translate }}: {{ detalheServicoOrcamentoEntity.dataSolicitacaoFormat }}</p>
-            <p>{{ 'QTD_SERVICO' | translate }}: {{ detalheServicoOrcamentoEntity.quantidade }}</p>
-            <p>{{ 'OBSERVACAO' | translate }}: {{ detalheServicoOrcamentoEntity.descricao }}</p>
-            <!-- <hr style="border-top: 1px solid #999;"> -->
         </div>
 
-        <!-- <ion-card-header>
-            <b>Dados do fornecedor</b>
-        </ion-card-header>
-        <ion-card-content>
-            <rating style="color: #FFB400" [(ngModel)]="detalheOrcamentoEntity.avaliacaoFornecedor" readOnly="true" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half" starIconName="star" nullable="false"></rating>
-            <p><b>{{ detalheOrcamentoEntity.nomeFornecedor }}</b></p>
-            <p>E-mail: {{ detalheOrcamentoEntity.emailFornecedor }}</p>
-            <p *ngIf="detalheOrcamentoEntity.siteFornecedor">Site: {{ detalheOrcamentoEntity.siteFornecedor }}</p>
-            <p>Endereço: {{ detalheOrcamentoEntity.enderecoFornecedorFormat }}</p>
+        <div padding style="margin-top: -10px;">
+            <p class="h2-color-cards" *ngIf="!detalheServicoOrcamentoEntity.statusCotacaoEnum" style="text-align: center;">
+                <strong style="color: blue">{{ 'LABEL_AGUARDE_RESPOSTAS' | translate }}</strong>
+            </p>
+            <hr *ngIf="!detalheServicoOrcamentoEntity.statusCotacaoEnum" style="border-top: 1px solid #999;">
+            <p>{{ 'NUMERO_ORCAMENTO' | translate }}: <b>{{ detalheServicoOrcamentoEntity.idOrcamentoFormat }}</b></p>
+            <p class="capitalized" *ngIf="detalheServicoOrcamentoEntity.statusCotacaoEnum">{{ 'STATUS' | translate }}: <b [ngClass]="{RESPONDIDO:'corAzul', ABERTO:'corVerde', ESCOLHIDO:'corLaranja', CONCLUIDO:'corVermelha'}[detalheServicoOrcamentoEntity.statusCotacaoEnum]">{{ detalheServicoOrcamentoEntity.statusCotacaoEnum | lowercase }}</b></p>
+            <p>{{ 'LABEL_ABERTO_EM' | translate }}: {{ detalheServicoOrcamentoEntity.dataCadastroFormat }}</p>
+            <p>{{ 'SOLICITACAO_PARA' | translate }}: {{ detalheServicoOrcamentoEntity.dataSolicitacaoFormat }}</p>
+            <p *ngIf="detalheServicoOrcamentoEntity.statusCotacaoEnum == 'CONCLUIDO'">{{ 'LABEL_CONCLUIDO_EM' | translate }}: {{ detalheServicoOrcamentoEntity.dataConcluidaFormat }}</p>
+            <p>{{ 'SERVICO' | translate }}: {{ detalheServicoOrcamentoEntity.nomeServico }}</p>
+            <p>{{ 'QTD_SERVICO' | translate }}: {{ detalheServicoOrcamentoEntity.quantidade }}</p>
+            <p>{{ 'LABEL_OBS_CLIENTE' | translate }}: {{ detalheServicoOrcamentoEntity.descricao }}</p>
+            <hr *ngIf="detalheServicoOrcamentoEntity.statusCotacaoEnum != 'ABERTO' && detalheServicoOrcamentoEntity.statusCotacaoEnum != null" style="border-top: 1px solid #999;">
+        </div>
 
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-6 style="margin-left: -20px;">
-                        <a ion-button clear item-end href="tel:+{{ detalheOrcamentoEntity.telefoneFornecedor }}" class="a-style-button-phone">
-                            <ion-chip>
-                                <ion-icon ios="ios-call" md="md-call"></ion-icon>
-                                <ion-label style="margin-top: 7px;"><b> {{ detalheOrcamentoEntity.telefoneFornecedor }} </b></ion-label>
-                            </ion-chip>
-                        </a>
+        <div *ngIf="detalheServicoOrcamentoEntity.statusCotacaoEnum != 'ABERTO' && detalheServicoOrcamentoEntity.statusCotacaoEnum != null">
+            <ion-card-header style="margin-top: -20px;">
+                <b>{{ 'LABEL_DADOS_FORNECEDOR' | translate }}</b>
+            </ion-card-header>
+            <ion-card-content>
+                <p><b>{{ detalheServicoOrcamentoEntity.nomeFornecedor }}</b>
+                </p>
+                <p *ngIf="!detalheServicoOrcamentoEntity.avaliacaoFornecedor">
+                    <span style="color: #FFB400; font-size: 12px;"><b>{{ 'LABEL_NOVO' | translate }}</b></span>
+                </p>
 
-                    </ion-col>
-                    <ion-col col-6 *ngIf="detalheOrcamentoEntity.telefone2Fornecedor">
-                        <a ion-button clear item-end href="tel:+{{ detalheOrcamentoEntity.telefone2Fornecedor }}" class="a-style-button-phone">
-                            <ion-chip>
-                                <ion-icon ios="ios-call" md="md-call"></ion-icon>
-                                <ion-label style="margin-top: 7px;"><b> {{ detalheOrcamentoEntity.telefone2Fornecedor }} </b></ion-label>
-                            </ion-chip>
-                        </a>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <hr style="border-top: 1px solid #999;">
-        </ion-card-content> -->
+                <div *ngIf="detalheServicoOrcamentoEntity.avaliacaoFornecedor" style="margin-bottom: 10px;">
+                    <div>
+                        <span style="color: #555;"><b>{{ detalheServicoOrcamentoEntity.avaliacaoFornecedorFormat }} </b></span>
+                        <rating style="text-align: right; color: #FFB400" [(ngModel)]="detalheServicoOrcamentoEntity.avaliacaoFornecedor" readOnly="true" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half" starIconName="star" nullable="false">
+                        </rating>
+                        <p><span class="corAzul" *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacoes == 1">{{ detalheServicoOrcamentoEntity.qtdAvaliacoes }} {{ 'LABEL_AVALIE_SERVICO' | translate }}</span></p>
+                        <p><span class="corAzul" *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacoes > 1">{{ detalheServicoOrcamentoEntity.qtdAvaliacoes }} {{ 'LABEL_AVALIE_SERVICO_PLURAL' | translate }}</span></p>
+                    </div>
+                </div>
 
-        <!-- <ion-card-header>
-            <b>Dados da resposta</b>
-        </ion-card-header>
-        <ion-card-content>
-            <p>Valor: R$ {{ detalheOrcamentoEntity.valorTotalFormat }}</p>
-            <p>Tipo de pagamento: {{ detalheOrcamentoEntity.tipoPagamento }}</p>
-            <p>Prazo de pagamento: {{ detalheOrcamentoEntity.prazoPagamento }}</p>
-            <p>Data de entrega: {{ detalheOrcamentoEntity.dataEntregaFormat }}</p>
-            <p>Validade do orçamento: {{ detalheOrcamentoEntity.validadeFormat }}</p>
-            <p>Observação: {{ detalheOrcamentoEntity.observacao }}</p>
+                <!-- <p>
+                    {{ 'LABEL_AVALIE_SERVICO' | translate }}:
+                    <span *ngIf="!detalheServicoOrcamentoEntity.avaliacaoFornecedor" style="color: #FFB400; font-size: 12px;"><b>{{ 'LABEL_NOVO' | translate }}</b></span>
+                    <span *ngIf="detalheServicoOrcamentoEntity.avaliacaoFornecedor" >
+                        <ion-icon name="star" style="color: #FFB400">  <b>{{ detalheServicoOrcamentoEntity.avaliacaoFornecedorFormat }}</b></ion-icon>
+                    </span>
+                </p>
+                <p><span class="corAzul" *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacoes == 1">{{ detalheServicoOrcamentoEntity.qtdAvaliacoes }} {{ 'LABEL_AVALIE_SERVICO' | translate }}</span></p>
+                <p><span class="corAzul" *ngIf="detalheServicoOrcamentoEntity.qtdAvaliacoes > 1">{{ detalheServicoOrcamentoEntity.qtdAvaliacoes }} {{ 'LABEL_AVALIE_SERVICO_PLURAL' | translate }}</span></p> -->
 
-        </ion-card-content> -->
-    </div>
+                <p>E-mail: {{ detalheServicoOrcamentoEntity.emailFornecedor }}</p>
+                <p *ngIf="detalheServicoOrcamentoEntity.siteFornecedor">Website: {{ detalheServicoOrcamentoEntity.siteFornecedor }}</p>
+                <p>{{ detalheServicoOrcamentoEntity.nomeCidade }} - {{ detalheServicoOrcamentoEntity.nomeEstado }}</p>
+                <!-- <p>{{ 'CIDADE' | translate }}: {{ detalheServicoOrcamentoEntity.nomeCidade }}</p> -->
+                <p>{{ 'ENDERECO' | translate }}: {{ detalheServicoOrcamentoEntity.enderecoFornecedorFormat }}</p>
 
-    <!-- <ion-fab bottom right #fab *ngIf="detalheOrcamentoEntity.idOrcamento != null && detalheOrcamentoEntity.statusCotacaoEnum == 'RESPONDIDO'">
-        <button ion-fab><ion-icon ios="ios-menu" md="md-menu"></ion-icon></button>
-        <ion-fab-list side="top">
-            <button ion-fab mini color="secondary" (click)="escolherCotacaoConfirm(fab)">
-                    <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon>
-                    <div  class="label"dir="rtl">Escolher Fornecedor</div>
-                </button>
-            <button ion-fab mini color="danger" (click)="modalImagensFornecedor(fab)">
-                <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                    <div  class="label"dir="rtl">Galeria de Imagens</div>
-                </button>
-        </ion-fab-list>
-    </ion-fab> -->
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 style="margin-left: -20px;">
+                            <a ion-button clear item-end href="tel:+{{ detalheServicoOrcamentoEntity.telefoneFornecedor }}" class="a-style-button-phone">
+                                <ion-chip style="width: 170px;">
+                                    <ion-icon ios="ios-call" md="md-call"></ion-icon>
+                                    <ion-label style="line-height: 2.3;"><b> {{ detalheServicoOrcamentoEntity.telefoneFornecedor }} </b></ion-label>
+                                </ion-chip>
+                            </a>
+
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-6 style="margin-left: -20px;" *ngIf="detalheServicoOrcamentoEntity.telefone2Fornecedor">
+                            <a ion-button clear item-end href="tel:+{{ detalheServicoOrcamentoEntity.telefone2Fornecedor }}" class="a-style-button-phone">
+                                <ion-chip style="width: 170px;">
+                                    <ion-icon ios="ios-call" md="md-call"></ion-icon>
+                                    <ion-label style="line-height: 2.3;"><b> {{ detalheServicoOrcamentoEntity.telefone2Fornecedor }} </b></ion-label>
+                                </ion-chip>
+                            </a>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <hr style="border-top: 1px solid #999;">
+            </ion-card-content>
+
+            <ion-card-header style="margin-top: -20px;">
+                <b>{{ 'LABEL_DADOS_RESPOSTA' | translate }}</b>
+            </ion-card-header>
+            <ion-card-content>
+                <p>{{ 'LABEL_RESPONDIDO_EM' | translate }}: {{ detalheServicoOrcamentoEntity.dataRespostaFormat }}</p>
+                <p>{{ 'VALOR' | translate }}: ¥{{ detalheServicoOrcamentoEntity.valorTotalFormat }}</p>
+                <p>{{ 'TIPO_PAGAMENTO' | translate }}: {{ detalheServicoOrcamentoEntity.tipoPagamento }}</p>
+                <!-- <p>{{ 'PRAZO_PAGAMENTO' | translate }}: {{ detalheServicoOrcamentoEntity.prazoPagamento }}</p> -->
+                <p>{{ 'DATA_ENTREGA' | translate }}: {{ detalheServicoOrcamentoEntity.dataEntregaFormat }}</p>
+                <p>{{ 'VALIDADE_ORCAMENTO' | translate }}: {{ detalheServicoOrcamentoEntity.validadeFormat }}</p>
+                <p>{{ 'OBSERVACAO' | translate }}: {{ detalheServicoOrcamentoEntity.observacaoFornecedor }}</p>
+
+            </ion-card-content>
+
+        </div>
+    </ion-card>
 
 </ion-content>

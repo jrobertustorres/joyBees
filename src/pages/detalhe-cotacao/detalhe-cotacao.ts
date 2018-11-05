@@ -95,6 +95,8 @@ export class DetalheCotacaoPage {
       .then((detalheCotacaoEntityResult: DetalheCotacaoEntity) => {
         this.detalheCotacaoEntity = detalheCotacaoEntityResult;
 
+        console.log(this.detalheCotacaoEntity);
+
         this.idServicoFornecedor = this.detalheCotacaoEntity.idServicoFornecedor;
 
         this.loading.dismiss();
@@ -113,7 +115,6 @@ export class DetalheCotacaoPage {
     }
   }
 
-  // escolherCotacaoConfirm(fab: FabContainer) {
   escolherCotacaoConfirm() {
     let confirm = this.alertCtrl.create({
       title: this.languageDictionary.TITLE_ESCOLHA_ORCAMENTO,
@@ -128,7 +129,6 @@ export class DetalheCotacaoPage {
           text: this.languageDictionary.BTN_CONFIRMAR,
           handler: () => {
             this.escolherCotacao();
-            // this.escolherCotacao(fab);
           }
         }
       ]
@@ -136,9 +136,7 @@ export class DetalheCotacaoPage {
     confirm.present();
   }
 
-  // escolherCotacao(fab) {
   escolherCotacao() {
-    // fab.close();
     this.detalheCotacaoEntity.idCotacao = this.idCotacao;
 
     this.loading = this.loadingCtrl.create({
@@ -162,17 +160,12 @@ export class DetalheCotacaoPage {
       });
   }
 
-  modalAvaliacao(fab: FabContainer) {
-    if(fab) {
-      fab.close();
-    }
+  modalAvaliacao() {
     let modal = this.modalCtrl.create(ModalAvaliacaoServicoFornecedorPage, {idCotacao: this.detalheCotacaoEntity.idCotacao});
     modal.present();
   }
 
-  // modalImagensFornecedor(fab: FabContainer) {
   modalImagensFornecedor() {
-    // fab.close();
     let modal = this.modalCtrl.create(ModalImagemFornecedorPage, {idServicoFornecedor: this.idServicoFornecedor});
     modal.present();
   }

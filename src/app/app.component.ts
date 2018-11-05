@@ -33,18 +33,17 @@ export class MyApp {
   private translate: TranslateService;
   private titleConection: string;
   private subTitleConection: string;
-  private versao: any;
   public languageDictionary: any;
-  private cordova: any;
+  //private cordova: any;
 
-  constructor(public platform: Platform, 
-              public statusBar: StatusBar, 
+  constructor(public platform: Platform,
+              public statusBar: StatusBar,
               public splashScreen: SplashScreen,
               public alertCtrl: AlertController,
               public menuCtrl: MenuController,
               translate: TranslateService,
               private globalization: Globalization,
-              private network: Network, 
+              private network: Network,
               private languageTranslateService: LanguageTranslateService,
               private appVersion: AppVersion,
               public push: Push) {
@@ -62,6 +61,7 @@ export class MyApp {
       this.platform.registerBackButtonAction(()=>this.myHandlerFunction());
       this.getLanguegeDefault();
 
+      //localStorage.setItem(Constants.VERSION_NUMBER, "0.0.1");
       if (this.platform.is('cordova')) {
         this.appVersion.getVersionNumber().then((version) => {
           localStorage.setItem(Constants.VERSION_NUMBER, version);
@@ -69,7 +69,7 @@ export class MyApp {
       }
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      
+
       this.pushSetup();
       // aqui checamos a conexão ao entrar no app
       // this.checkNetwork();
@@ -146,14 +146,12 @@ export class MyApp {
           text: this.languageDictionary.BTN_PUSH_VER,
           handler: () => {
             this.nav.push(PrincipalPage);
-            // this.nav.push(DetailsPage, { message: data.message });
           }
         }]
       });
       confirmAlert.present();
     } else {
-      // this.nav.push(OrcamentosListPage);
-      console.log('Push notification clicked');
+      this.nav.push(PrincipalPage);
     }
   });
 
@@ -173,7 +171,7 @@ export class MyApp {
          }]
        });
      alert.present();
-    } 
+    }
   }
 
   //OBTENDO O IDIOMA CONFIGURADO NO APARELHO

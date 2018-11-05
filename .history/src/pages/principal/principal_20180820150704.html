@@ -1,0 +1,68 @@
+<ion-header>
+
+    <ion-navbar color="navbarColor">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title style="text-align: left;"><img height="30" src="assets/imgs/joy.png"> </ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content class="content-stable card-background-page">
+
+    <div id='conteudo' class="div-style-publicidade">
+        <ion-slides pager *ngIf="propagandas && propagandas.length" (ionSlideDidChange)="slideChanged()" autoplay="5000" loop="true" speed="3000">
+            <ion-slide *ngFor="let propaganda of propagandas">
+                <!-- <ion-slide *ngFor="let propaganda of propagandas" (click)="openModalMaisInformacoesPrincipal(propaganda.idServicoFornecedor, true, propaganda.nomeServico);"> -->
+                <!-- <img src="assets/imgs/logiic.gif" class="image-style"> -->
+                <img [src]="sanitizer.bypassSecurityTrustUrl(propaganda.imagem)" class="image-style" />
+            </ion-slide>
+        </ion-slides>
+    </div>
+
+    <!-- <div *ngIf="propagandas?.length > 0"> -->
+    <div>
+
+        <ion-card class="ion-card-background-style" (click)="goVagasEmDestaque()">
+            <!-- <img src="assets/imgs/hive2.png" class="hive-img-style" /> -->
+            <ion-icon ios="ios-people" md="ios-people" class="icon-style"></ion-icon>
+            <div class="card-title" padding>
+                <span class="span-style-home">
+                    <b class="font-style-home">{{ 'VAGAS_UPPER_CASE' | translate }}<br> {{ 'VAGAS_EMPREGO_HOME' | translate }}</b>
+                </span>
+            </div>
+        </ion-card>
+        <ion-card class="ion-card-background-style" (click)="goFornecedoresEmDestaque()">
+            <!-- <img src="assets/imgs/hive2.png" class="hive-img-style" /> -->
+            <ion-icon ios="ios-contacts" md="ios-contacts" class="icon-style"></ion-icon>
+            <div class="card-title" padding>
+                <span class="span-style-home">
+                    <b class="font-style-home">{{ 'PRESTADORES' | translate }}<br> {{ 'SERVICOS' | translate }}</b>
+                </span>
+            </div>
+        </ion-card>
+
+        <!-- <ion-card style="height: 130px; background-color: #484848;" (click)="goVagasEmDestaque()">
+            <img src="assets/imgs/hive2.png" class="hive-img-style" />
+            <ion-icon ios="ios-people" md="ios-people" class="icon-style"></ion-icon>
+            <div class="card-title" padding>
+                <span class="span-style-home">
+                    <b class="font-style-home">{{ 'VAGAS_UPPER_CASE' | translate }}<br> {{ 'VAGAS_EMPREGO_HOME' | translate }}</b>
+                </span>
+            </div>
+        </ion-card>
+
+        <ion-card style="height: 130px; background-color: #484848;" (click)="goFornecedoresEmDestaque()">
+            <img src="assets/imgs/hive2.png" class="hive-img-style" />
+            <ion-icon ios="ios-contacts" md="ios-contacts" class="icon-style"></ion-icon>
+            <div class="card-title" padding>
+                <span style="float: left; margin-top: -8%; font-size: 20px; z-index: 2; position: relative;"><b class="font-style-home">{{ 'PRESTADORES' | translate }}<br> {{ 'SERVICOS' | translate }}</b>
+                </span>
+            </div>
+        </ion-card> -->
+
+
+    </div>
+
+</ion-content>

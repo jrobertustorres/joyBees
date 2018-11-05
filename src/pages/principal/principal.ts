@@ -42,14 +42,15 @@ export class PrincipalPage {
   private servicoOrcamentoEntity: ServicoOrcamentoEntity;
   private versaoAppEntity: VersaoAppEntity;
   private versao: any;
-  // segment: string = "vagasDestaque"; // default button
 
   private translate: TranslateService;
   private loading = null;
   private propagandas: any;
   private publicidadePropagandaEntity: PublicidadePropagandaEntity;
+  private latitudeResp: number;
+  private longitudeResp: number;
 
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               translate: TranslateService,
               private versaoAppService: VersaoAppService,
@@ -74,7 +75,7 @@ export class PrincipalPage {
     this.publicidadePropagandaEntity = new PublicidadePropagandaEntity();
     this.orcamentoEntity = new OrcamentoEntity();
     this.versaoAppEntity = new VersaoAppEntity();
-    
+
   }
 
   ngOnInit() {
@@ -88,6 +89,11 @@ export class PrincipalPage {
   }
 
   ionViewDidEnter() {
+    //aqui obrigo a tela a chamar o método a partir da segunda vez que
+    //entra para sempre buscar as publicidades mais recentes
+    if(this.latitudeResp && this.longitudeResp) {
+      this.findPublicidadePropaganda(this.latitudeResp, this.longitudeResp);
+    }
   }
 
   getTraducao() {
@@ -97,7 +103,12 @@ export class PrincipalPage {
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
-        this.getAtualizacaoStatus();
+        // this.getAtualizacaoStatus();
+        if (this.platform.is('cordova')) {
+          this.getGpsStatus();
+        } else {
+          this.getGpsPosition();
+        }
       });
     }
     catch (err){
@@ -143,21 +154,21 @@ export class PrincipalPage {
     this.slides.autoplayDisableOnInteraction = false;
   }
 
+  // AQUI PODEMOS MANDAR A PUBLICIDADE CONFORME AS COORDENADAS - mostrar promoção quando próximo ao local
   findPublicidadePropaganda(latitudePes, longitudePes) {
     try {
-
+      this.propagandas = null;// limpo aqui para carregar novas publicidades caso tenha atualização
       this.publicidadePropagandaEntity.latitudePes = latitudePes;
       this.publicidadePropagandaEntity.longitudePes = longitudePes;
-      // this.publicidadePropagandaEntity.latitudePes = -18.9693729;
-      // this.publicidadePropagandaEntity.longitudePes = -48.2748947;
 
       this.publicidadePropagandaService.findPublicidadePropaganda(this.publicidadePropagandaEntity)
       .then((propagandasResult: PublicidadePropagandaEntity) => {
         this.propagandas = propagandasResult;
-
-        this.loading.dismiss();
+        // setTimeout(() => {
+        //   this.propagandas = propagandasResult;
+        // }, 500);
       }, (err) => {
-        this.loading.dismiss();
+        // this.loading.dismiss();
         this.alertCtrl.create({
           subTitle: err.message,
           buttons: ['OK']
@@ -171,46 +182,54 @@ export class PrincipalPage {
     }
   }
 
+  openLink(linkPublicidade) {
+    window.open(linkPublicidade, '_system', 'location=yes');
+  }
+
   getGpsStatus() {
     let successCallback = (isAvailable) => { console.log('Is available? ' + isAvailable); };
     let errorCallback = (e) => console.error(e);
-      
+
       this.diagnostic.isLocationEnabled().then(successCallback).catch(errorCallback);
-      
+
       // only android
       this.diagnostic.isGpsLocationEnabled().then(successCallback, errorCallback);
 
       this.diagnostic.isLocationEnabled()
       .then((state) => {
+        console.log('dentro do then');
         if (state == true) {
+          console.log('dentro state true');
           this.getGpsPosition();
         } else {
+          console.log('dentro accuracy');
           this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+            console.log('dentro do then do accuracy');
             if(canRequest) {
+              console.log('dentro do canRequest');
               // the accuracy option will be ignored by iOS
               this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-              .then(
-                () => this.getGpsPosition(),
-                error => this.showLocationText()
-              );
+              .then(() => {
+                console.log('dentro do then do canRequest ===> ');
+                this.getGpsPosition();
+              }).catch((error) => {
+                this.showLocationText();
+               });
             }
-          
+
           });
         }
       }).catch(e => console.error(e));
   }
 
   getGpsPosition() {
-    // this.loading = this.loadingCtrl.create({
-    //   content: this.languageDictionary.LOADING_TEXT
-    // });
-    // this.loading.present();
-
     this.geolocation.getCurrentPosition().then((resp) => {
+      this.latitudeResp = resp.coords.latitude;
+      this.longitudeResp = resp.coords.longitude;
       this.findPublicidadePropaganda(resp.coords.latitude, resp.coords.longitude);
      }).catch((error) => {
-       console.log('Error getting location', error);
-        this.loading.dismiss();
+       // aqui mandamos as propagandas padrão. Podemos mandar outras aleatórias ou definidas para esse caso
+      this.findPublicidadePropaganda(0, 0);
      });
   }
 
@@ -220,8 +239,9 @@ export class PrincipalPage {
       message: this.languageDictionary.MESSAGE_SUBTITLE_LOCATION,
       buttons: [
         {
-          text: 'OK!',
+          text: 'OK',
           handler: data => {
+            this.findPublicidadePropaganda(0,0);
           }
         }
       ]
@@ -232,130 +252,9 @@ export class PrincipalPage {
   goVagasEmDestaque() {
     this.navCtrl.push(VagasEmDestaquePage);
   }
-  
+
   goFornecedoresEmDestaque() {
     this.navCtrl.push(NovoOrcamentoPage);
   }
-
-  getAtualizacaoStatus() {
-    try {
-      this.loading = this.loadingCtrl.create({
-        content: this.languageDictionary.LOADING_TEXT,
-      });
-      this.loading.present();
-
-      this.versaoAppEntity.versao = localStorage.getItem(Constants.VERSION_NUMBER);
-
-      this.versaoAppService.versaoApp(this.versaoAppEntity)
-      .then((versaoResult: VersaoAppEntity) => {
-        this.versao = versaoResult;
-
-        if(this.versao.descontinuado == true) { //voltar para true
-          this.loading.dismiss();
-          this.showAlertVersao(this.versao);
-        } else {
-          if (this.platform.is('cordova')) {
-            this.getGpsStatus();
-          } else {
-            this.getGpsPosition();
-          }
-        }
-
-        // this.loading.dismiss();
-      }, (err) => {
-        this.loading.dismiss();
-        this.alertCtrl.create({
-          subTitle: err.message,
-          buttons: ['OK']
-        }).present();
-      });
-
-    }catch (err){
-      if(err instanceof RangeError){
-      }
-      console.log(err);
-    }
-  }
-
-  showAlertVersao(versao) {
-    const alert = this.alertCtrl.create({
-      title: this.languageDictionary.TITLE_ATUALIZACAO_APP,
-      subTitle: this.languageDictionary.SUBTITLE_ATUALIZACAO_APP,
-      buttons: [
-        {
-        text: 'OK',
-          handler: () => {
-            this.getPlatform(versao);
-          }
-      }]
-    });
-    alert.present();
-  }
-
-  getPlatform(versao) {
-    if (this.platform.is('ios')) {
-      this.inAppBrowser.create(versao.linkIos, '_system', 'location=yes');
-      // const browser = this.inAppBrowser.create(url, '_self', options);
-      this.platform.exitApp();
-    }
-
-    if (this.platform.is('android')) {
-      // This will only print when on iOS
-      console.log('I am an android device!');
-      this.inAppBrowser.create(versao.linkAndroid, '_system', 'location=yes');
-      // const browser = this.inAppBrowser.create(url, '_self', options);
-      // window.open(href, '_system', 'location=yes');
-      this.platform.exitApp();
-    }
-    
-  }
-
-  // ESSA PARTE FICARÁ PARA DEPOIS
-  // openModalMaisInformacoesPrincipal(idServicoFornecedor, quantidadeObrigatorio, nomeServico){
-  //   let modal = this.modalCtrl.create(ModalInformacoesPorSevicoPage, {idServicoFornecedor: idServicoFornecedor, 
-  //     quantidadeObrigatorio: quantidadeObrigatorio, nomeServico: nomeServico});
-
-  //   modal.onDidDismiss((data) => {
-  //     if (data) {
-  //       this.lancarPedidoDireto(data.filter);
-  //     }
-  //   });
-
-  //   modal.present();
-  // }
-
-  // lancarPedidoDireto(filtro) {
-
-  //   try {
-  //     this.loading = this.loadingCtrl.create({
-  //       content: this.languageDictionary.LOADING_TEXT
-  //     });
-  //     this.loading.present();
-
-  //     this.servicoOrcamentoEntity = new ServicoOrcamentoEntity();
-  //     this.orcamentoEntity.servicoOrcamentoEntity = filtro;
-
-  //     this.orcamentoService
-  //     .lancarOrcamentoServicoPublicidade(this.orcamentoEntity)
-  //     .then((orcamentoEntityResult: OrcamentoEntity) => {
-  //       this.loading.dismiss();
-  //       this.presentToast();
-  //     }, (err) => {
-  //       this.loading.dismiss();
-  //       this.alertCtrl.create({
-  //         subTitle: err.message,
-  //         buttons: ['OK']
-  //       }).present();
-  //     });
-
-  //   } catch (err){
-  //     if(err instanceof RangeError){
-  //       console.log('out of range');
-  //     }
-  //     console.log(err);
-  //   }
-    
-  // }
-
 
 }

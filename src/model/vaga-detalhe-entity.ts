@@ -1,5 +1,5 @@
 export class VagaDetalheEntity {
-    
+
       public idVaga: number;
       public idCidade: number;
       public idVagaUsuario: number;
@@ -15,9 +15,12 @@ export class VagaDetalheEntity {
       public dataInicial: Date;
       public dataInicialFormat: string;
       public dataFinalFormat: string;
+      public dataCandidatadaFormat: string;
       public qtdVaga: number;
       public salarioHomem: number;
+      public salarioHomemAte: number;
       public salarioMulher: number;
+      public salarioMulherAte: number;
       public sexoEnum: string;
       public sexoFormat: string;
       public grauEntendimentoEnum: string;
@@ -30,5 +33,5 @@ export class VagaDetalheEntity {
 
       constructor(){
       }
-    
+
     }

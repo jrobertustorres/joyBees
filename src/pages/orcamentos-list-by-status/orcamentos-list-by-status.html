@@ -5,7 +5,8 @@
     <ion-icon name="menu"></ion-icon>
   </button>
         <ion-title>
-            Orç. {{ status | lowercase}}s
+            <!-- <span style="font-size: 16px;">{{ 'LABEL_ORCAMENTO' | translate }} {{ statusEnum | lowercase}}s</span> -->
+            <span> {{ statusEnum }}</span>
         </ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="showFilter = !showFilter">
@@ -17,11 +18,10 @@
 </ion-header>
 
 <ion-content class="content-stable">
-    <!-- <ion-searchbar (ionInput)="getItems($event)" *ngIf="showFilter" placeholder="Buscar"></ion-searchbar> -->
     <ion-searchbar (search)="filtrarPorNomeServico($event)" (ionClear)="onCancelFilter($event)" (ionInput)="onInputFilter($event);" *ngIf="showFilter" placeholder="Buscar"></ion-searchbar>
 
     <div class="h2-color-cards" text-wrap padding style="margin-top: 50px;" *ngIf="orcamentosList?.length == 0">
-        <div style="text-align: center;color: #484848;"><strong>{{ 'LABEL_NAO_EXISTE_ORCAMENTO' | translate }} {{ status | lowercase}}</strong></div>
+        <div style="text-align: center;color: #484848;"><strong>{{ 'LABEL_NAO_EXISTE_ORCAMENTO' | translate }} {{ statusEnum | lowercase}}</strong></div>
         <div style="text-align: center;">
             <ion-icon style="font-size: 30px;color: #484848;" ios="ios-albums" md="md-albums"></ion-icon>
         </div>
@@ -29,9 +29,9 @@
 
     <ion-list>
         <button ion-item *ngFor="let orcamento of orcamentosList" (click)="verificaStatus(orcamento.idServicoOrcamento)">
-          <h4 style="color: #66667D;">{{ 'NUMERO_ORCAMENTO' | translate }}: <strong>{{ orcamento.idOrcamento }}</strong></h4>
+          <h4 style="color: #66667D;">{{ 'NUMERO_ORCAMENTO' | translate }}: <strong>{{ orcamento.idOrcamentoFormat }}</strong></h4>
           <h4 style="color: #66667D;">{{ 'SERVICO' | translate }}: {{ orcamento.servico }}</h4>
-          <h4 style="color: #66667D;">{{ 'DATA_SOLICITACAO' | translate }}: {{ orcamento.dataSolicitacaoFormat }}</h4>
+          <h4 style="color: #66667D;">{{ 'LABEL_ABERTO_EM' | translate }}: {{ orcamento.dataCadastroFormat }}</h4>
         </button>
     </ion-list>
 

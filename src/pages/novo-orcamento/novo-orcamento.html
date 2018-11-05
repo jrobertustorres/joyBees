@@ -45,11 +45,11 @@
         <ion-row>
             <ion-col no-padding>
                 <button no-margin ion-button full icon-end color="navbarColor" *ngIf="idUsuario" (click)="verificaServicosSelecionados()">
-                    <span class="span-style" style="font-size: 12px; color: #000;"><b>{{ 'BTN_LANCAR' | translate }}</b></span>
-                    <ion-icon ios="ios-paper-plane" md="md-paper-plane" style="color: #000;"></ion-icon>
+                    <span class="span-style-color"><b>{{ 'BTN_LANCAR' | translate }}</b></span>
+                    <ion-icon ios="ios-paper-plane" md="md-paper-plane" class="span-style-color"></ion-icon>
                 </button>
                 <button no-margin ion-button full icon-end color="navbarColor" *ngIf="!idUsuario" (click)="goToLogin()">
-                    <span class="span-style" style="font-size: 12px; color: #000;"><b>{{ 'BTN_FACA_LOGIN' | translate }}</b></span>
+                    <span class="span-style-color"><b>{{ 'BTN_FACA_LOGIN' | translate }}</b></span>
                 </button>
             </ion-col>
         </ion-row>

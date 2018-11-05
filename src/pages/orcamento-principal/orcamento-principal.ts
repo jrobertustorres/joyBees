@@ -21,6 +21,7 @@ export class OrcamentoPrincipalPage {
   private cotacaoOrcamentoUsuarioEntity: CotacaoOrcamentoUsuarioEntity;
   private loading = null;
   public languageDictionary: any;
+  private refresh: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
@@ -67,18 +68,21 @@ export class OrcamentoPrincipalPage {
 
   getCockpitCotacaoByUsuario() {
     try {
-      this.loading = this.loadingCtrl.create({
-        content: this.languageDictionary.LOADING_TEXT,
-      });
-      this.loading.present();
+      if(this.refresh == false) {
+        this.loading = this.loadingCtrl.create({
+          content: this.languageDictionary.LOADING_TEXT,
+        });
+        this.loading.present();
+      } 
 
       this.orcamentoService.findCockpitCotacaoByUsuario()
       .then((cockpitCotacaoServiceResult: CotacaoOrcamentoUsuarioEntity) => {
         this.cotacaoOrcamentoUsuarioEntity = cockpitCotacaoServiceResult;
 
-        this.loading.dismiss();
+        this.refresh = true;
+        this.loading ? this.loading.dismiss() : '';
       }, (err) => {
-        this.loading.dismiss();
+        this.loading ? this.loading.dismiss() : '';
         this.alertCtrl.create({
           subTitle: err.message,
           buttons: ['OK']

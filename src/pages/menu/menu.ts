@@ -1,13 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { IonicPage, AlertController, Nav, MenuController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, AlertController, Nav, MenuController, NavParams, LoadingController, Platform, ActionSheetController  } from 'ionic-angular';
 import { Constants } from '../../app/constants';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Platform, ActionSheetController } from 'ionic-angular';
 import {DomSanitizer} from '@angular/platform-browser';
 
 //ENTITY
 import { UsuarioEntity } from '../../model/usuario-entity';
 import { UsuarioDetalheEntity } from '../../model/usuario-detalhe-entity';
+import { VersaoAppEntity } from '../../model/versao-app-entity';
 
 //PAGES
 import { HomePage } from '../home/home';
@@ -27,6 +27,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LoginService } from '../../providers/login-service';
 import { UsuarioService } from '../../providers/usuario-service';
 import { LanguageTranslateService } from '../../providers/language-translate-service';
+import { VersaoAppService } from '../../providers/versao-app-service';
 
 @IonicPage()
 @Component({
@@ -43,6 +44,7 @@ export class MenuPage implements OnInit{
 
   private translate: TranslateService;
   private usuarioEntity: UsuarioEntity;
+  private versaoAppEntity: VersaoAppEntity;
 
   private sairLogout: string;
   private configuracoes: string;
@@ -61,6 +63,8 @@ export class MenuPage implements OnInit{
   private _idUsuario: any;
   private _idUsuarioFacebook: any;
 
+  private versao: any;
+
   constructor(public navParams: NavParams,
               private alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
@@ -72,10 +76,12 @@ export class MenuPage implements OnInit{
               private camera: Camera,
               public platform: Platform,
               private sanitizer: DomSanitizer,
+              private versaoAppService: VersaoAppService,
               private languageTranslateService: LanguageTranslateService,
               public actionSheetCtrl: ActionSheetController) {
 
     this.usuarioEntity = new UsuarioEntity();
+    this.versaoAppEntity = new VersaoAppEntity();
   }
 
   ngOnInit() {
@@ -87,6 +93,9 @@ export class MenuPage implements OnInit{
     });
     this.loginService.emailPessoaChangeEvent.subscribe(login => {
       this.loginPessoa = login.split(/(\s).+\s/).join("");
+    });
+    this.loginService.photoChangeEvent.subscribe(foto => {
+      this.getFotoPerfil();
     });
 
     this.getTraducao();
@@ -111,7 +120,7 @@ export class MenuPage implements OnInit{
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
-        this.verificaIdUsuario();
+        this.getAtualizacaoStatus();
 
       });
     }
@@ -145,10 +154,74 @@ export class MenuPage implements OnInit{
   }
 
   verificaIdUsuario() {
-    if(localStorage.getItem(Constants.ID_USUARIO)!=null) {
-      this.callLoginByIdService(localStorage.getItem(Constants.ID_USUARIO));
-    } else {
+    if(!localStorage.getItem(Constants.ID_USUARIO)){
+      this.loading.dismiss();
       this.rootPage = HomePage;
+    }
+    else if(localStorage.getItem(Constants.ID_USUARIO)) {
+      this.callLoginByIdService(localStorage.getItem(Constants.ID_USUARIO));
+    }
+  }
+
+  getAtualizacaoStatus() {
+    try {
+      this.loading = this.loadingCtrl.create({
+        content: this.languageDictionary.LOADING_TEXT_AUT,
+      });
+      this.loading.present();
+
+      this.versaoAppEntity.versao = localStorage.getItem(Constants.VERSION_NUMBER);
+      this.versaoAppEntity.tipoAplicativoEnum = 'CLIENTE';
+
+      this.versaoAppService.versaoApp(this.versaoAppEntity)
+      .then((versaoResult: VersaoAppEntity) => {
+        this.versao = versaoResult;
+
+        if(this.versao.descontinuado == true) {
+          this.showAlertVersao(this.versao);
+        } else {
+          this.verificaIdUsuario();
+        }
+
+      }, (err) => {
+        this.loading.dismiss();
+        this.alertCtrl.create({
+          subTitle: err.message,
+          buttons: ['OK']
+        }).present();
+      });
+
+    }catch (err){
+      if(err instanceof RangeError){
+      }
+      console.log(err);
+    }
+  }
+
+  showAlertVersao(versao) {
+    const alert = this.alertCtrl.create({
+      title: this.languageDictionary.TITLE_ATUALIZACAO_APP,
+      subTitle: this.languageDictionary.SUBTITLE_ATUALIZACAO_APP,
+      buttons: [
+        {
+        text: 'OK',
+          handler: () => {
+            this.getPlatform(versao);
+          }
+      }]
+    });
+    alert.present();
+  }
+
+  getPlatform(versao) {
+    if (this.platform.is('ios')) {
+      window.open(versao.linkIos, '_system', 'location=yes');
+      this.platform.exitApp();
+    }
+
+    if (this.platform.is('android')) {
+      window.open(versao.linkAndroid, '_system', 'location=yes');
+      this.platform.exitApp();
     }
   }
 
@@ -202,19 +275,18 @@ export class MenuPage implements OnInit{
 
   selectFromGallery() {
     var options = {
+      quality: 60,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
+      correctOrientation: true
     };
     this.camera.getPicture(options).then((imageData) => {
       this.cameraUrl = 'data:image/jpeg;base64,' + imageData;
       localStorage.setItem(Constants.CAMERA_URL, this.cameraUrl);
-      // this.cameraData = 'data:image/jpeg;base64,' + imageData;
-      // localStorage.setItem(Constants.CAMERA_URL, this.cameraData);
       this.photoSelected = true;
       this.photoTaken = false;
-      // this.callCadastraImagemUsuario(this.cameraData);
       this.callCadastraImagemUsuario(this.cameraUrl);
 
     }, (err) => {
@@ -223,8 +295,11 @@ export class MenuPage implements OnInit{
 
   openCamera() {
     var options = {
+      quality: 60,
       sourceType: this.camera.PictureSourceType.CAMERA,
-      destinationType: this.camera.DestinationType.DATA_URL
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      correctOrientation: true
     };
     this.camera.getPicture(options).then((imageData) => {
       this.cameraData = 'data:image/jpeg;base64,' + imageData;
@@ -240,9 +315,9 @@ export class MenuPage implements OnInit{
   constroiMenu() {
     this.pages = [
       { title: 'Home', component: PrincipalPage, isVisible: true, icon: 'ios-home' },
-      { title: this.languageDictionary.ORCAMENTOS, component: OrcamentoPrincipalPage, isVisible: true, icon: 'ios-list-box' },
       { title: this.languageDictionary.VAGAS_EMPREGO, component: VagasEmDestaquePage, isVisible: true, icon: 'ios-search' },
       { title: this.languageDictionary.VAGA_CANDIDATADAS, component: VagasCandidatadasPage, isVisible: true, icon: 'ios-briefcase' },
+      { title: this.languageDictionary.ORCAMENTOS, component: OrcamentoPrincipalPage, isVisible: true, icon: 'ios-clipboard' },
       // { title: this.languageDictionary.PEDIDOS, component: OrcamentoPrincipalPage, isVisible: true, icon: 'ios-cart' },
       { title: this.languageDictionary.CONFIGURACOES, component: ConfiguracoesPage, isVisible: true, icon: 'ios-settings' }
     ];
@@ -281,25 +356,27 @@ export class MenuPage implements OnInit{
   }
 
   callLoginByIdService(idUsuario) {
-  
+
     try {
-      this.loading = this.loadingCtrl.create({
-        content: this.languageDictionary.LOADING_TEXT
-      });
-      this.loading.present();
 
       this.usuarioEntity.idUsuario = idUsuario;
       this.loginService.loginByIdService(this.usuarioEntity)
         .then((usuarioEntityResult: UsuarioEntity) => {
-          // this.constroiMenu();
-          // this.getFotoPerfil();
           this.loading.dismiss();
           this.rootPage = PrincipalPage;
 
-      }, (err) => {
-        this.alertCtrl.create({
-          subTitle: err.message,
-          buttons: ['OK']
+        }, (err) => {
+          this.loading.dismiss();
+          err.message = err.message ? err.message : this.languageDictionary.LABEL_FALHA_CONEXAO_SERVIDOR;
+          this.alertCtrl.create({
+            subTitle: err.message,
+            buttons: [{
+              text: 'OK',
+              handler: () => {
+                this.logout();
+              }
+            }]
+            // buttons: ['OK']
         }).present();
       });
     }
@@ -309,10 +386,18 @@ export class MenuPage implements OnInit{
       }
       console.log(err);
     }
-      
+
   }
 
   logout() {
+    localStorage.removeItem(Constants.ID_USUARIO);
+    localStorage.removeItem(Constants.TOKEN_USUARIO);
+    localStorage.removeItem(Constants.NOME_PESSOA);
+    this.nav.setRoot(HomePage);
+    this.menuCtrl.close();
+  }
+
+  confirmaLogout() {
     let alert = this.alertCtrl.create({
       subTitle: this.languageDictionary.BTN_SUBTITLE_LOGOUT,
       buttons: [
@@ -332,7 +417,7 @@ export class MenuPage implements OnInit{
             localStorage.removeItem(Constants.IS_CADASTRO_COMPLETO_SERVICO);
             localStorage.removeItem(Constants.CAMERA_URL);
             localStorage.removeItem(Constants.CAMERA_DATA);
-            localStorage.removeItem(Constants.IDIOMA_USUARIO);
+            // localStorage.removeItem(Constants.IDIOMA_USUARIO);
             localStorage.removeItem(Constants.DADOS_USUARIO_FACEBOOK);
             // localStorage.removeItem('userFacebook');
             // this.nativeStorage.remove(Constants.ID_VAGA_CANDIDATAR);
@@ -344,63 +429,5 @@ export class MenuPage implements OnInit{
     });
     alert.present();
   }
-
-  // getLanguage() {
-  //   this._idioma = sysOptions.systemLanguage == 'pt-br' ? 'pt-br' : 'en';
-
-  //   this.selectedLanguage = localStorage.getItem(Constants.IDIOMA_USUARIO);
-
-  //   if(!this.selectedLanguage){
-  //     this.selectedLanguage = this._idioma;
-  //   } else if(this.selectedLanguage) {
-  //     this.selectedLanguage = this.selectedLanguage;
-
-  //     if (this.selectedLanguage == 'pt-br') {
-  //       this.loadingText = 'Aguarde...';
-  //       this.subTitleLogout = 'Deseja realmente sair?';
-  //       this.cancelLogout = 'FICAR';
-  //       this.sairLogout = 'SAIR';
-  //       this.vagas = 'Vagas de emprego';
-  //       this.home = 'Home';
-  //       this.orcamentos = 'Orçamentos';
-  //       this.configuracoes = 'Configurações';
-  //       this.candidaturas = 'Vagas candidatadas';
-  //       this.alterarFoto = 'Alterar foto';
-  //       this.abrirCamera = 'Abrir câmera';
-  //       this.abrirGaleria = 'Abrir galeria';
-  //       this.cancelar = 'Cancelar';
-  //     } else {
-  //       this.loadingText = 'Wait...';
-  //       this.subTitleLogout = 'Are you sure you want to log out?';
-  //       this.cancelLogout = 'STAY';
-  //       this.sairLogout = 'LOG OUT';
-  //       this.vagas = 'Jobs';
-  //       this.home = 'Home';
-  //       this.orcamentos = 'Quotes';
-  //       this.configuracoes = 'Settings';
-  //       this.candidaturas = 'Candidate applications';
-  //       this.alterarFoto = 'Change photo';
-  //       this.abrirCamera = 'Open camera';
-  //       this.abrirGaleria = 'Open Gallery';
-  //       this.cancelar = 'Cancel';
-  //     }
-  //     this.constroiMenu();
-  //     // this.loginService.userChangeEvent.subscribe(nomePessoa => {
-  //     //   this.nomePessoa = nomePessoa.split(/(\s).+\s/).join("");
-  //     // });
-  //     // this.loginService.emailPessoaChangeEvent.subscribe(login => {
-  //     //   this.loginPessoa = login.split(/(\s).+\s/).join("");
-  //     // });
-  //     // this.pages = [
-  //     //   { title: this.home, component: PrincipalPage, isVisible: true, icon: 'ios-home' },
-  //     //   { title: this.orcamentos, component: OrcamentoPrincipalPage, isVisible: true, icon: 'ios-list-box' },
-  //     //   { title: this.vagas, component: VagasEmDestaquePage, isVisible: true, icon: 'ios-search' },
-  //     //   { title: this.candidaturas, component: VagasCandidatadasPage, isVisible: true, icon: 'ios-briefcase' },
-  //     //   { title: this.configuracoes, component: ConfiguracoesPage, isVisible: true, icon: 'ios-settings' }
-  //     // ];
-  //   }
-  //   this.translate.use(this.selectedLanguage);
-
-  // }
 
 }

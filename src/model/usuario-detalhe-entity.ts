@@ -1,16 +1,16 @@
 export class UsuarioDetalheEntity {
-    
+
       public idUsuario: number;
       public idPessoa: number;
       public idCidade: number;
       public idEstado: number;
-    
+
       public nomePessoa: string;
       public telefonePessoa: string;
       public tipoUsuario: string;
       public endereco: string;
       public idiomaUsuario: string;
-      
+
       public email: string;
       public genero: string;
       public idade: number;
@@ -20,7 +20,7 @@ export class UsuarioDetalheEntity {
       public grauFala: string;
       public grauEscrita: string;
       public salario: number;
-      
+
       public loginUsuario: string;
       public senhaUsuario: string;
       public idUsuarioFacebook: string;
@@ -29,7 +29,11 @@ export class UsuarioDetalheEntity {
       public isCadastroCompletoVaga: boolean;
       public isCadastroCompletoServico: boolean;
 
+      public disponibilidadeMudanca: boolean;
+      public disponibilidadeHoraExtra: boolean;
+      public possuiFilhos: boolean;
+      public idadeFilhoCacula: number;
+
       constructor(){
       }
     }
-    

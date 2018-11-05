@@ -3,7 +3,7 @@ export class UsuarioEntity {
   public idUsuario: number;
   public idPessoa: number;
   public idFornecedor: number;
-  
+
   public nomePessoa: string;
   public nomeFornecedor: string;
   public idUsuarioFacebook: number;
@@ -17,15 +17,20 @@ export class UsuarioEntity {
   public status: boolean;
   public versaoApp: string;
   public genero: string;
-  
+
   public isCadastroCompletoVaga: boolean;
   public isCadastroCompletoServico: boolean;
-  
+
   public novaSenha: string;
   public imagemPessoaBs64: string;
   public isCadastroCompleto: boolean;
 
   public limiteDados: number;
+
+  public disponibilidadeMudanca: boolean;
+  public disponibilidadeHoraExtra: boolean;
+  public possuiFilhos: boolean;
+  public idadeFilhoCacula: number;
 
   constructor(){
   }

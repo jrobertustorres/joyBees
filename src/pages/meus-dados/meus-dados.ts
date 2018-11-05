@@ -41,9 +41,10 @@ export class MeusDadosPage implements OnInit {
   private nomePessoa: string;
   private isCadastroCompletoVaga: any;
   private isCadastroCompletoServico: any;
+  public escondeIdade: boolean = true;
 
-  constructor(public navCtrl: NavController, 
-              public navParams: NavParams, 
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
               public loadingCtrl: LoadingController,
               public alertCtrl: AlertController,
               private usuarioService: UsuarioService,
@@ -67,6 +68,11 @@ export class MeusDadosPage implements OnInit {
       'email': ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]],
       'genero': ['', Validators.required],
       'idade': ['', Validators.required],
+      'disponibilidadeMudanca': ['', Validators.required],
+      'disponibilidadeHoraExtra': ['', Validators.required],
+      'possuiFilhos': [''],
+      'idadeFilhoCacula': [''],
+      //'idadeFilhoCacula': ['', Validators.required],
       'nacionalidade': ['', [Validators.required, Validators.maxLength(100)]],
       'experienciaProfissional': ['', [Validators.required, Validators.maxLength(500)]],
       'grauEntendimento': ['', Validators.required],
@@ -77,18 +83,30 @@ export class MeusDadosPage implements OnInit {
       'telefonePessoa2': ['', Validators.maxLength(50)],
       'senhaUsuario': [''],
       'confirmSenha': ['']
-      // 'endereco': ['', [Validators.required, Validators.maxLength(300)]],
-      // 'idEstado': ['', Validators.required],
-      // 'idCidade': ['', Validators.required],
-      // 'statusAceitoTermoUso': ['false']
     }, {
-        validator: PasswordValidation.MatchPassword // your validation method
+        validator: PasswordValidation.MatchPassword
       }
     );
+    if(!localStorage.getItem(Constants.TOKEN_USUARIO)){
+      this.isReadOnly = false;
+      this.dadosUsuarioForm.get('senhaUsuario').setValidators([Validators.required]);
+    } else if(localStorage.getItem(Constants.TOKEN_USUARIO)) {
+      this.isReadOnly = true;
+    }
+  }
 
+
+  showIdadeFilhoCacula(event) {
+    if(event == true || event == 'true') {
+      this.escondeIdade = false;
+    } else {
+    this.escondeIdade = true;
+    this.usuarioDetalheEntity.idadeFilhoCacula = null;
+    }
   }
 
   ionViewDidLoad() {
+    this.usuarioDetalheEntity.possuiFilhos = false;
   }
 
   getTraducao() {
@@ -98,13 +116,8 @@ export class MeusDadosPage implements OnInit {
       .getTranslate()
       .subscribe(dados => {
         this.languageDictionary = dados;
-        if(!localStorage.getItem(Constants.TOKEN_USUARIO)){
-          this.isReadOnly = false;
-          this.dadosUsuarioForm.get('senhaUsuario').setValidators([Validators.required]);
-        }
-        else if(localStorage.getItem(Constants.TOKEN_USUARIO)) {
-          this.isReadOnly = true;
-            this.callGetDadosUsuario();
+        if(localStorage.getItem(Constants.TOKEN_USUARIO)) {
+          this.callGetDadosUsuario();
         }
       });
     }
@@ -182,7 +195,7 @@ export class MeusDadosPage implements OnInit {
       localStorage.setItem(Constants.IS_CADASTRO_COMPLETO_VAGA, this.isCadastroCompletoVaga);
       this.isCadastroCompletoServico = usuarioEntityResult.isCadastroCompletoServico;
       localStorage.setItem(Constants.IS_CADASTRO_COMPLETO_SERVICO, this.isCadastroCompletoServico);
-      
+
       this.loading.dismiss();
       this.navCtrl.setRoot(PrincipalPage);
     }, (err) => {
@@ -206,7 +219,7 @@ export class MeusDadosPage implements OnInit {
       localStorage.setItem(Constants.IS_CADASTRO_COMPLETO_VAGA, this.isCadastroCompletoVaga);
       this.isCadastroCompletoServico = usuarioDetalheEntityResult.isCadastroCompletoServico;
       localStorage.setItem(Constants.IS_CADASTRO_COMPLETO_SERVICO, this.isCadastroCompletoServico);
-      
+
       this.loading.dismiss();
       this.presentToast();
       setTimeout(() => {
@@ -233,6 +246,12 @@ export class MeusDadosPage implements OnInit {
         .getDadosUsuario()
         .then((dadosUsuarioDetalheResult) => {
           this.usuarioDetalheEntity = dadosUsuarioDetalheResult;
+
+          if(this.usuarioDetalheEntity.possuiFilhos) {
+            this.escondeIdade = false;
+          } else {
+            this.escondeIdade = true;
+          }
 
           let salario: any = this.usuarioDetalheEntity.salario;
           salario = salario.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," );

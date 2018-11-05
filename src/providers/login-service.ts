@@ -3,8 +3,6 @@ import 'rxjs/add/operator/map';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Constants } from '../app/constants';
 
-// import { Storage } from '@ionic/storage';
-
 //ENTITYS
 import { UsuarioEntity } from '../model/usuario-entity';
 
@@ -15,16 +13,16 @@ export class LoginService {
   public userChangeEvent = new EventEmitter();
   public emailPessoaChangeEvent = new EventEmitter();
   public languageChangeEvent = new EventEmitter();
+  public photoChangeEvent = new EventEmitter();
   private usuarioEntity: UsuarioEntity;
 
   constructor(public http: Http) {
+    this.usuarioEntity = new UsuarioEntity();
   }
 
   public login(usuarioEntity) {
     try {
 
-      // localStorage.removeItem(Constants.IDIOMA_USUARIO);
-      this.usuarioEntity = new UsuarioEntity();
       this.usuarioEntity = usuarioEntity;
       this.usuarioEntity.tokenPush = localStorage.getItem(Constants.TOKEN_PUSH);
       this.usuarioEntity.versaoApp = localStorage.getItem(Constants.VERSION_NUMBER);
@@ -47,6 +45,7 @@ export class LoginService {
             this.userChangeEvent.emit(data.nomePessoa);
             this.emailPessoaChangeEvent.emit(data.login);
             this.languageChangeEvent.emit(data.idiomaUsuario);
+            this.photoChangeEvent.emit(data.imagemPessoaBs64);
           }, (err) => {
             reject(err.json());
           });
@@ -61,12 +60,12 @@ export class LoginService {
 
   public loginByIdService(usuarioEntity) {
     try {
-      this.usuarioEntity = new UsuarioEntity();
       this.usuarioEntity = usuarioEntity;
       this.usuarioEntity.tokenPush = localStorage.getItem(Constants.TOKEN_PUSH);
       this.usuarioEntity.versaoApp = localStorage.getItem(Constants.VERSION_NUMBER);
       return new Promise((resolve, reject) => {
-        this.http.post(Constants.API_URL + 'loginById/', JSON.stringify(usuarioEntity), this.options)
+        this.http.post(Constants.API_URL + 'loginById/', 
+          JSON.stringify(this.usuarioEntity), this.options)
           .map(res=>res.json())
           .subscribe(data => {
             resolve(data);
@@ -75,11 +74,10 @@ export class LoginService {
             localStorage.setItem(Constants.ID_USUARIO, data.idUsuario);
             localStorage.setItem(Constants.TOKEN_USUARIO, data.token);
             localStorage.setItem(Constants.NOME_PESSOA, data.nomePessoa);
-            localStorage.setItem(Constants.CAMERA_DATA, data.imagemPessoaBs64);
             localStorage.setItem(Constants.IS_CADASTRO_COMPLETO_SERVICO, data.isCadastroCompletoServico);
             localStorage.setItem(Constants.IS_CADASTRO_COMPLETO_VAGA, data.isCadastroCompletoVaga);
             localStorage.setItem(Constants.IDIOMA_USUARIO, data.idiomaUsuario);
-            
+
             this.userChangeEvent.emit(data.nomePessoa);
             this.emailPessoaChangeEvent.emit(data.login);
             this.languageChangeEvent.emit(data.idiomaUsuario);
@@ -99,13 +97,13 @@ export class LoginService {
   public loginFacebook(usuarioEntity) {
     try {
 
-      this.usuarioEntity = new UsuarioEntity();
       this.usuarioEntity = usuarioEntity;
       this.usuarioEntity.tokenPush = localStorage.getItem(Constants.TOKEN_PUSH);
       this.usuarioEntity.versaoApp = localStorage.getItem(Constants.VERSION_NUMBER);
       this.usuarioEntity.idiomaUsuario = localStorage.getItem(Constants.IDIOMA_USUARIO) == 'pt-br' ? 'PORTUGUES' : 'INGLES';
       return new Promise((resolve, reject) => {
-        this.http.post(Constants.API_URL + 'loginByIdFacebook/', JSON.stringify(this.usuarioEntity), this.options)
+        this.http.post(Constants.API_URL + 'loginByIdFacebook/', 
+          JSON.stringify(this.usuarioEntity), this.options)
           .map(res=>res.json())
           .subscribe(data => {
             resolve(data);
@@ -135,4 +133,3 @@ export class LoginService {
   }
 
 }
-

@@ -1,5 +1,5 @@
 export class VagaListaEntity {
-    
+
       public idVaga: number;
       public nomeFornecedor: string;
       public cidadeEstadoFormat: string;
@@ -9,13 +9,15 @@ export class VagaListaEntity {
       public tempoAberto: string;
       public qtdCandidatado: number;
       public dataCandidatadaFormat: string;
-      
+
       public dataAberturaVagaFormat: string;
       public statusEnum: string;
+      public faixaSalarioHomemFormat: string;
+      public faixaSalarioMulherFormat: string;
 
       public limiteDados: number;
 
       constructor(){
       }
-    
+
     }

@@ -1,10 +1,11 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { NavController, NavParams, LoadingController, ModalController, AlertController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ModalController, AlertController, ToastController, Platform } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { AppVersion } from '@ionic-native/app-version';
+// import { AppVersion } from '@ionic-native/app-version';
 import { Device } from '@ionic-native/device';
 import { Constants } from '../../app/constants';
+
 
 //ENTITY
 import { UsuarioRamoEmpresaEntity } from '../../model/usuario-ramo-empresa-entity';
@@ -46,6 +47,7 @@ export class ConfiguracoesPage implements OnInit {
   private erroAppSubject: string;
   private erroAppBody: string;
   private infoSuporte: string;
+  private linkLoja: string;
   private _idioma: any;
   private usuarioRamoEmpresaEntity: UsuarioRamoEmpresaEntity;
 
@@ -57,11 +59,12 @@ export class ConfiguracoesPage implements OnInit {
               private socialSharing: SocialSharing,
               private toastCtrl: ToastController,
               private emailComposer: EmailComposer,
-              private appVersion: AppVersion,
+              // private appVersion: AppVersion,
               private device: Device,
               private languageProvider: LanguageProvider,
               private ramoEmpresaService: RamoEmpresaService,
               private languageTranslateService: LanguageTranslateService,
+              public platform: Platform,
               translate: TranslateService) {
 
     this.translate = translate;
@@ -148,12 +151,7 @@ export class ConfiguracoesPage implements OnInit {
     }
   }
 
-  // ramosInteressePush(selectedValue: any) {
-  //   console.log('Selected', selectedValue);
-  // }
-
   ramosInteressePush(selectedValue: any) {
-    console.log('Selected', selectedValue);
     if (selectedValue) {
       
       try {
@@ -200,25 +198,32 @@ export class ConfiguracoesPage implements OnInit {
   }
 
   openModalTermos(){
-    let modal = this.modalCtrl.create(ModalTermosPage);
-    modal.present();
+    window.open('http://www.joybees.com/terms', '_system', 'location=yes');
+    // let modal = this.modalCtrl.create(ModalTermosPage);
+    // modal.present();
   }
 
   openModalPolitica(){
-    let modal = this.modalCtrl.create(ModalPoliticaPrivacidadePage);
-    modal.present();
+    window.open('http://www.joybees.com/privacy', '_system', 'location=yes');
+    // let modal = this.modalCtrl.create(ModalPoliticaPrivacidadePage);
+    // modal.present();
+  }
+
+  getPlatform() {
+    if (this.platform.is('ios')) {
+      this.linkLoja = "https://play.google.com/store/apps/details?id=br.com.spacetrack.mobile";
+    }
+    
+    if (this.platform.is('android')) {
+      this.linkLoja = "https://play.google.com/store/apps/details?id=br.com.spacetrack.mobile";
+    }
   }
 
   shareAnyWhere() {
-    // this.socialSharing.share("Indicação para experimentar o Pet Prático. Tenha todos os Pet Shops em um mesmo lugar. Na palma de sua mão!","",
-    this.socialSharing.share(this.socialSharingTitle,"",
-         "http://www.petpratico.com.br/logo_shared.jpg", "https://play.google.com/store/apps/details?id=br.com.logiictecnologia.festaideal")
+    this.socialSharing.share(this.languageDictionary.TITLE_SOCIAL_SHARING,"",
+         "http://www.joybees.com/img/logo.png", this.linkLoja)
     .then(() => {
-      this.messagePresentToast = this.languageDictionary.MSG_OBRIGADO_COMPARTILHAR;
-      this.presentToast();
-      // Success!
     }).catch(() => {
-      // Error!
     });
   }
 
@@ -230,11 +235,11 @@ export class ConfiguracoesPage implements OnInit {
      
      let email = {
        to: 'diretoria@logiic.com.br',
-       cc: ['jose@logiic.com.br', 'bruno@logiic.com.br'],
-       subject: this.erroAppSubject,
-       body: '<p><h1>'+ this.erroAppBody +'</h1></p>' +
-       '<h1>'+ this.infoSuporte +'</h1>'+
-       '<h1>JoyBees v'+ this.appVersion.getVersionCode() +'</h1>' +
+       cco: ['jose@logiic.com.br', 'bruno@logiic.com.br'],
+       subject: this.languageDictionary.LABLE_ASSUNTO_ERRO,
+       body: '<p><h1>'+ this.languageDictionary.LABLE_ERRO_BODY +'</h1></p>' +
+       '<h1>'+ this.languageDictionary.LABLE_INFO_SUPORTE +'</h1>'+
+       '<h1>JoyBees v'+ localStorage.getItem(Constants.VERSION_NUMBER) +'</h1>' +
        '<h1>'+ this.device.model +'</h1>' +
        '<h1>'+ this.device.platform +' '+ this.device.version +'</h1>' +
        '<h1>----------------------</h1>',

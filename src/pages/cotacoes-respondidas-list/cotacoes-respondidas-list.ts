@@ -74,7 +74,6 @@ export class CotacoesRespondidasListPage {
 
       this.cotacaoEntity.limiteDados = this.cotacaoEntity.limiteDados ? this.cotacoesRespondidasList.length : null;
 
-      // if(this.cotacaoEntity.limiteDados == null) {
       if(this.refresh == false) {
         this.loading = this.loadingCtrl.create({
           content: this.languageDictionary.LOADING_TEXT,
@@ -86,6 +85,7 @@ export class CotacoesRespondidasListPage {
       this.orcamentoService.findCotacoesRespondidas(this.cotacaoEntity)
       .then((cotacaoResult: CotacaoEntity) => {
         this.cotacoesRespondidasList = cotacaoResult;
+        console.log(this.cotacoesRespondidasList);
         this.cotacaoEntity.limiteDados = this.cotacoesRespondidasList.length;
         this.qtdFornecedorPendenteResposta = this.cotacoesRespondidasList[0].qtdFornecedorPendenteResposta;
 

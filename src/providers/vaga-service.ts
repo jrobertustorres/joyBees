@@ -11,8 +11,8 @@ export class VagaService {
   private options = new RequestOptions({ headers: this.headers, method: "post" });
   public urlServico: string;
 
-  constructor(public http: Http, 
-              public alertCtrl: AlertController, 
+  constructor(public http: Http,
+              public alertCtrl: AlertController,
               public loadingCtrl: LoadingController) {
   }
 
@@ -29,7 +29,7 @@ export class VagaService {
             reject(err.json());
           });
       });
-      
+
     } catch (e){
       if(e instanceof RangeError){
         console.log('out of range');
@@ -50,7 +50,7 @@ export class VagaService {
             reject(err.json());
           });
       });
-      
+
     } catch (e){
       if(e instanceof RangeError){
         console.log('out of range');
@@ -134,7 +134,7 @@ export class VagaService {
             // reject(err.json());
           });
       });
-      
+
     } catch (e){
       if(e instanceof RangeError){
         console.log('out of range');
@@ -142,12 +142,12 @@ export class VagaService {
     }
   }
 
-  public callDescartarVaga(idVagaUsuario) {
+  public descandidatarVaga(idVaga) {
     try {
 
       return new Promise((resolve, reject) => {
-        this.http.post(Constants.API_URL  + 'descandidatarVaga/' 
-        + localStorage.getItem(Constants.TOKEN_USUARIO), JSON.stringify(idVagaUsuario), this.options)
+        this.http.post(Constants.API_URL  + 'descandidatarVaga/'
+        + localStorage.getItem(Constants.TOKEN_USUARIO), JSON.stringify(idVaga), this.options)
           .map(res=>res.json())
           .subscribe(data => {
             resolve(data);
@@ -155,7 +155,7 @@ export class VagaService {
             // reject(err.json());
           });
       });
-      
+
     } catch (e){
       if(e instanceof RangeError){
         console.log('out of range');
@@ -164,4 +164,3 @@ export class VagaService {
   }
 
 }
-

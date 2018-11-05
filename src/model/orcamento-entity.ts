@@ -8,6 +8,7 @@ export class OrcamentoEntity {
   public dataOrcamento: string;
   public statusOrcamentoEnum: string;
   public nomeServico: string;
+  public dataCadastroFormat: string;
 
   public latitudePes: number;
   public longitudePes: number;
