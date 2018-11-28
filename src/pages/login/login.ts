@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Constants } from '../../app/constants';
 import { IonicPage, NavController, AlertController, LoadingController } from 'ionic-angular';
-import { RecuperarSenhaPage } from '../recuperar-senha/recuperar-senha';
 import { FormBuilder,	FormGroup, Validators } from '@angular/forms';
 
 //PAGE
+import { RecuperarSenhaPage } from '../recuperar-senha/recuperar-senha';
 import { PrincipalPage } from '../principal/principal';
 import { DetalheVagaPage } from './../detalhe-vaga/detalhe-vaga';
 

@@ -211,11 +211,11 @@ export class ConfiguracoesPage implements OnInit {
 
   getPlatform() {
     if (this.platform.is('ios')) {
-      this.linkLoja = "https://play.google.com/store/apps/details?id=br.com.spacetrack.mobile";
+      this.linkLoja = "https://play.google.com/store/apps/details?id=com.logiictecnologia.joybees";
     }
     
     if (this.platform.is('android')) {
-      this.linkLoja = "https://play.google.com/store/apps/details?id=br.com.spacetrack.mobile";
+      this.linkLoja = "https://play.google.com/store/apps/details?id=com.logiictecnologia.joybees";
     }
   }
 

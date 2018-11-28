@@ -11,6 +11,7 @@ import { LanguageTranslateService } from '../../providers/language-translate-ser
 //PAGES
 import { CotacoesRespondidasListPage } from '../cotacoes-respondidas-list/cotacoes-respondidas-list';
 import { DetalhaServicoOrcamentoByUsuarioPage } from '../detalha-servico-orcamento-by-usuario/detalha-servico-orcamento-by-usuario';
+
 @IonicPage()
 @Component({
   selector: 'page-orcamentos-list-by-status',

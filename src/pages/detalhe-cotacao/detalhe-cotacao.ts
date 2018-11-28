@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, ModalController, FabContainer } from 'ionic-angular';
 
 //ENTITYS
-// import { CotacaoEntity } from '../../model/cotacao-entity';
 import { DetalheCotacaoEntity } from '../../model/detalhe-cotacao-entity';
 
 //SERVICES
@@ -10,7 +9,6 @@ import { OrcamentoService } from '../../providers/orcamento-service';
 import { LanguageTranslateService } from '../../providers/language-translate-service';
 
 //PAGES
-// import { PrincipalPage } from '../principal/principal';
 import { OrcamentoPrincipalPage } from '../orcamento-principal/orcamento-principal';
 import { ModalImagemFornecedorPage } from '../modal-imagem-fornecedor/modal-imagem-fornecedor';
 import { ModalAvaliacaoServicoFornecedorPage } from '../modal-avaliacao-servico-fornecedor/modal-avaliacao-servico-fornecedor';
@@ -37,8 +35,6 @@ export class DetalheCotacaoPage {
               private toastCtrl: ToastController,
               private languageTranslateService: LanguageTranslateService,
               public navParams: NavParams) {
-    // this.cotacaoEntity = new CotacaoEntity();
-    // this.detalheOrcamentoEntity = new DetalheOrcamentoEntity();
     this.detalheCotacaoEntity = new DetalheCotacaoEntity();
     this.idCotacao = navParams.get('idCotacao');
   }
