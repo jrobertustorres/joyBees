@@ -91,8 +91,6 @@ export class DetalheCotacaoPage {
       .then((detalheCotacaoEntityResult: DetalheCotacaoEntity) => {
         this.detalheCotacaoEntity = detalheCotacaoEntityResult;
 
-        console.log(this.detalheCotacaoEntity);
-
         this.idServicoFornecedor = this.detalheCotacaoEntity.idServicoFornecedor;
 
         this.loading.dismiss();

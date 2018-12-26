@@ -85,7 +85,6 @@ export class CotacoesRespondidasListPage {
       this.orcamentoService.findCotacoesRespondidas(this.cotacaoEntity)
       .then((cotacaoResult: CotacaoEntity) => {
         this.cotacoesRespondidasList = cotacaoResult;
-        console.log(this.cotacoesRespondidasList);
         this.cotacaoEntity.limiteDados = this.cotacoesRespondidasList.length;
         this.qtdFornecedorPendenteResposta = this.cotacoesRespondidasList[0].qtdFornecedorPendenteResposta;
 
